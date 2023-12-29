@@ -1,15 +1,9 @@
 package app.models.Product;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Random;
 
-@Entity
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private int productID;
     private String serialNumber;
     private String name;

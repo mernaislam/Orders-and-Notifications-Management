@@ -3,23 +3,11 @@ package app.models.Orders;
 import app.models.Customer.Customer;
 import app.models.Product.Product;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-//        include = JsonTypeInfo.As.PROPERTY,
-//        property = "type")
-
-@Entity
 public abstract class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int orderID;
-
     protected Customer customer;
     protected Double productsFees; // to be calculated when the order is placed
     protected Double shippingFees; // to be calculated when the order is shipped
