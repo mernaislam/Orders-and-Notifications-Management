@@ -73,7 +73,8 @@ public abstract class Order {
         this.shippingFees = shippingFees;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalPrice() {
+        // to be called after setting productsFees and shippingFees
+        this.totalPrice = this.productsFees + this.shippingFees;
     }
 }

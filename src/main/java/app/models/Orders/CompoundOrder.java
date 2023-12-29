@@ -10,6 +10,7 @@ public class CompoundOrder extends Order{
     private ArrayList<Order> orders = new ArrayList<>();
 
     public CompoundOrder(){
+        // generate random compound order
         super();
         int numOfProducts = new Random().nextInt() * (15 - 1) + 1;
         for(int i = 0; i < numOfProducts; i++){
