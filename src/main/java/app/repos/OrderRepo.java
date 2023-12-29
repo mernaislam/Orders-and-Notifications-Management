@@ -1,8 +1,9 @@
 package app.repos;
 
-import app.models.Orders.CompoundOrder;
+import app.models.Customer.Customer;
 import app.models.Orders.Order;
 import app.models.Orders.SimpleOrder;
+import app.models.Product.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class OrderRepo implements Repository<Order> {
 
     @Override
     public void delete(int ordID) {
-//        System.out.println("delete order");
+        System.out.println("delete order");
         for (int i = 0; i < orders.size(); i++) {
             if (orders.get(i).getOrderID() == ordID) {
                 orders.remove(i);
@@ -30,7 +31,6 @@ public class OrderRepo implements Repository<Order> {
             }
         }
     }
-
     @Override
     public void update(Order ord, int ordID) {
         for (int i = 0; i < orders.size(); i++) {
@@ -58,10 +58,22 @@ public class OrderRepo implements Repository<Order> {
     @Override
     public void loadData() {
         // load orders
-        orders.add(new SimpleOrder());
-        orders.add(new CompoundOrder());
-        orders.add(new SimpleOrder());
-        orders.add(new CompoundOrder());
-        orders.add(new SimpleOrder());
+        ArrayList<Product> orderItems = new ArrayList<>();
+        orderItems.add(new Product());
+        Order simpleOrder1 = new SimpleOrder(new Customer(),  orderItems);
+        orders.add(simpleOrder1);
+        // order2
+        orderItems = new ArrayList<>();
+        orderItems.add(new Product());
+        orderItems.add(new Product());
+        Order simpleOrder2 = new SimpleOrder(new Customer(),  orderItems);
+        orders.add(simpleOrder2);
+        // order3
+        orderItems = new ArrayList<>();
+        orderItems.add(new Product());
+        orderItems.add(new Product());
+        Order simpleOrder3 = new SimpleOrder(new Customer(),  orderItems);
+        orders.add(simpleOrder3);
+
     }
 }
