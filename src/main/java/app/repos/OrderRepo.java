@@ -1,10 +1,17 @@
 package app.repos;
 
+import app.models.Customer.Customer;
+import app.models.Orders.CompoundOrder;
 import app.models.Orders.Order;
+import app.models.Orders.SimpleOrder;
+import app.models.Product.Category;
+import app.models.Product.Product;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-public class OrderRepo implements Repository{
+@Component
+public class OrderRepo implements Repository<Order> {
     private ArrayList<Order> orders = new ArrayList<>();
 
     public OrderRepo() {
@@ -12,33 +19,43 @@ public class OrderRepo implements Repository{
     }
 
     @Override
-    public void add(Object object) {
+    public void add(Order ord) {
 
     }
 
     @Override
-    public void delete(Object object) {
+    public void delete(int ordID) {
 
     }
 
     @Override
-    public void update(Object object) {
+    public void delete(Order ord) {
 
     }
 
     @Override
-    public void save(Object object) {
+    public void update(Order ord, int ordID) {
 
     }
 
     @Override
-    public Object findByID(int id) {
+    public void save(Order ord) {
+
+    }
+
+    @Override
+    public Order findByID(int ordID) {
+
+        return null;
+    }
+
+    @Override
+    public ArrayList<Order> getAll() {
         return null;
     }
 
     @Override
     public void loadData() {
         // load orders
-
     }
 }

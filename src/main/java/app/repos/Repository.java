@@ -1,10 +1,21 @@
 package app.repos;
 
-public interface Repository {
-    public void add(Object object);
-    public void delete(Object object);
-    public void update(Object object);
-    public void save(Object object);
-    public Object findByID(int id);
+import java.util.ArrayList;
+
+public interface Repository<T> {
+    public void add(T object);
+
+    public void delete(int objectID);
+
+    public void delete(T object);
+
+    public void update(T object, int objectID);
+
+    public void save(T object);
+
+    public T findByID(int objectID);
+
+    public ArrayList<T> getAll();
+
     public void loadData();
 }
