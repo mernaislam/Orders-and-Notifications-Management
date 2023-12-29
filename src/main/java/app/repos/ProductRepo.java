@@ -2,11 +2,13 @@ package app.repos;
 
 import app.models.Product.Category;
 import app.models.Product.Product;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProductRepo implements Repository{
+@Component
+public class ProductRepo implements Repository<Product> {
     private HashMap<Category, Integer> categoryCount = new HashMap<>();
     private ArrayList<Product> products = new ArrayList<>();
 
@@ -15,30 +17,40 @@ public class ProductRepo implements Repository{
     }
 
     @Override
-    public void add(Object object) {
+    public void add(Product p) {
         // add
         // update categoryCount
     }
 
     @Override
-    public void delete(Object object) {
+    public void delete(int pID) {
         // delete
         // update categoryCount
     }
 
     @Override
-    public void update(Object object) {
+    public void delete(Product p) {
 
     }
 
     @Override
-    public void save(Object object) {
+    public void update(Product p, int pID) {
 
     }
 
     @Override
-    public Object findByID(int id) {
+    public void save(Product p) {
+
+    }
+
+    @Override
+    public Product findByID(int pID) {
         return null;
+    }
+
+    @Override
+    public ArrayList<Product> getAll() {
+        return products;
     }
 
     @Override
@@ -50,7 +62,7 @@ public class ProductRepo implements Repository{
     }
 
 
-    public int getCategoryCount(Category category){
+    public int getCategoryCount(Category category) {
         return categoryCount.get(category);
     }
 }
