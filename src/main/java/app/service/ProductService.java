@@ -1,18 +1,21 @@
 package app.service;
 
+import app.models.Customer.Customer;
 import app.models.Product.Product;
 import app.repos.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
 
 @Service
 public class ProductService {
     private final ProductRepo productRepo;
     @Autowired
-    public ProductService(ProductRepo productRepo) {
-        this.productRepo = productRepo;
+    public ProductService() {
+        this.productRepo = new ProductRepo();
     }
     public Product findProductById(int id) {
         return productRepo.findByID(id);
@@ -32,5 +35,26 @@ public class ProductService {
 
     public void deleteProduct(int id) {
         productRepo.delete(id);
+    }
+
+    boolean uniqueId(int id){
+        ArrayList<Product> allProducts = getProducts();
+        if(allProducts != null){
+            for (int i = 0; i < allProducts.size(); i++) {
+                if(Objects.equals(id, allProducts.get(i).getProductID())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public int generateProductId(){
+        Random random = new Random();
+        int value = random.nextInt(100000 - 1);
+        while(!uniqueId(value)){
+            value = random.nextInt(100000 - 1);
+        }
+        return value;
     }
 }

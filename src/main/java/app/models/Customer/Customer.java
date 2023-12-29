@@ -1,15 +1,12 @@
 package app.models.Customer;
 
+import app.service.CustomerService;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Random;
 
 @Entity
 public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int customerID;
     private String name;
     private String username;
@@ -34,7 +31,6 @@ public class Customer {
 
     public Customer(String name, String username, String password, String email, String shippingAddress,
                     String city, String phoneNumber, Double balance) {
-        // id should be generated automatically
         this.name = name;
         this.username = username;
         this.password = password;
@@ -43,6 +39,21 @@ public class Customer {
         this.city = city;
         this.phoneNumber = phoneNumber;
         this.balance = balance;
+        CustomerService customerService = new CustomerService();
+        this.customerID = customerService.generateCustomerId();
+    }
+
+    public Customer(int id, String name, String username, String password, String email, String shippingAddress,
+                    String city, String phoneNumber, Double balance) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.shippingAddress = shippingAddress;
+        this.city = city;
+        this.phoneNumber = phoneNumber;
+        this.balance = balance;
+        this.customerID = id;
     }
     public int getCustomerID() {
         return customerID;

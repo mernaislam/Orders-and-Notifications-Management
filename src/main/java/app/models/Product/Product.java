@@ -1,5 +1,7 @@
 package app.models.Product;
 
+import app.service.ProductService;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,8 +10,6 @@ import java.util.Random;
 
 @Entity
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int productID;
     private String serialNumber;
     private String name;
@@ -26,12 +26,20 @@ public class Product {
         this.price = new Random().nextDouble() * (100.0 - 5.0) + 5.0;
     }
 
-    public Product(String name, String vendor, Category category, double price) {
-        // serialNumber should be generated automatically
+    public Product(int id, String name, String vendor, Category category, double price) {
         this.name = name;
         this.vendor = vendor;
         this.category = category;
         this.price = price;
+        this.productID = id;
+    }
+    public Product(String name, String vendor, Category category, double price) {
+        this.name = name;
+        this.vendor = vendor;
+        this.category = category;
+        this.price = price;
+        ProductService productService = new ProductService();
+        this.productID = productService.generateProductId();
     }
 
     public int getProductID() {

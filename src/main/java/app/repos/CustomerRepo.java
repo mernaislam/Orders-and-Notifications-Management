@@ -14,6 +14,10 @@ public class CustomerRepo implements Repository<Customer> {
         return customers;
     }
 
+    public void setCustomers(ArrayList<Customer> customers) {
+        this.customers = customers;
+    }
+
     @Override
     public void add(Customer customer) {
         customers.add(customer);
@@ -49,29 +53,27 @@ public class CustomerRepo implements Repository<Customer> {
 
     @Override
     public ArrayList<Customer> getAll() {
-        return null;
+        return customers;
     }
 
     @Override
     public void loadData() {
-        customers.add(new Customer(
+        customers.add(new Customer(0,
                 "Nada Mohamed", "nadaamohhamed",
                 "123456789", "nada@email.com",
                 "6,Street 9", "Cairo",
                 "01234256781", 500.0));
 
-        customers.add(new Customer(
+        customers.add(new Customer(1,
                 "Merna Islam", "mernaislam",
                 "merna12", "merna@email.com",
                 "2,Street 50", "Giza",
                 "0123356782", 250.0));
 
-        customers.add(new Customer(
+        customers.add(new Customer(2,
                 "Waleed", "snowkaai",
                 "s123", "waleed@email.com",
                 "3,Street 70", "Cairo",
                 "0123123123", 1000.0));
-        customers.add(new Customer());
-        customers.add(new Customer());
     }
 }

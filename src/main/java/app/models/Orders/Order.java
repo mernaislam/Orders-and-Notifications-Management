@@ -28,9 +28,9 @@ public abstract class Order {
         this.customer = new Customer();
         this.orderDate = LocalDate.now();
         int numOfProducts = new Random().nextInt() * (15 - 1) + 1;
-        for(int i = 0; i < numOfProducts; i++){
-            this.products.add(new Product());
-        }
+//        for(int i = 0; i < numOfProducts; i++){
+//            this.products.add(new Product());
+//        }
     }
     public Order(Customer customer, ArrayList<Product> products){
         this.customer = customer;
