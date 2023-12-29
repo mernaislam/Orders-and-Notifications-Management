@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class CompoundOrder extends Order{
     private ArrayList<Order> orders;
 
-    public CompoundOrder(Customer customer, ArrayList<Product> products, ArrayList<Order> orders) {
-        super(customer, products);
+    public CompoundOrder(Customer customer, int orderID,ArrayList<Product> products, ArrayList<Order> orders) {
+        super(customer, orderID,products);
         this.orders = orders;
     }
 

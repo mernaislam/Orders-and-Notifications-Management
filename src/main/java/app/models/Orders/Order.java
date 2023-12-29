@@ -15,8 +15,9 @@ public abstract class Order {
     protected LocalDate orderDate;
     protected ArrayList<Product> products;
 
-    public Order(Customer customer, ArrayList<Product> products){
+    public Order(Customer customer, int orderID, ArrayList<Product> products){
         this.customer = customer;
+        this.orderID = orderID;
         this.products = products;
         this.orderDate = LocalDate.now();
     }
