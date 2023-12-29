@@ -1,20 +1,50 @@
 package app.models.Orders;
 
+import app.models.Customer.Customer;
 import app.models.Product.Product;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public abstract class Order {
-    protected int orderId;
-    protected int customerID;
-    protected Double productsFees;
-    protected Double shippingFees;
-    protected Double totalCost;
+    protected int orderID;
+    protected Customer customer;
+    protected Double productsFees; // to be calculated when the order is placed
+    protected Double shippingFees; // to be calculated when the order is shipped
+    protected Double totalPrice; // to be calculated when the order is placed and shipped
     protected LocalDate orderDate;
     protected ArrayList<Product> products;
 
-    public int getCustomerID() {
-        return customerID;
+    public Order(Customer customer, ArrayList<Product> products){
+        this.customer = customer;
+        this.products = products;
+        this.orderDate = LocalDate.now();
+    }
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public Double getProductsFees() {
+        return productsFees;
+    }
+
+    public Double getShippingFees() {
+        return shippingFees;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
     }
 }
