@@ -1,10 +1,14 @@
-package app.Managers;
+package app.managers;
 
 import app.models.Notification.*;
 import app.models.Orders.Order;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class NotificationManager {
     private NotificationChannel channel;
+    private Queue<NotificationTemplate> notificationsQueue = new LinkedList<>();
 
     public NotificationManager(NotificationChannel channel) {
         this.channel = channel;
