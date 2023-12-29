@@ -2,8 +2,10 @@ package app.repos;
 
 import app.models.Customer.Customer;
 import app.models.Orders.Order;
+import app.models.Orders.OrderStatus;
 import app.models.Orders.SimpleOrder;
 import app.models.Product.Product;
+import jdk.jshell.Snippet;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -33,9 +35,14 @@ public class OrderRepo implements Repository<Order> {
     }
     @Override
     public void update(Order ord, int ordID) {
+        return;
+    }
+    public void updateStatus(OrderStatus status,int ordID) {
         for (int i = 0; i < orders.size(); i++) {
             if (orders.get(i).getOrderID() == ordID) {
-                orders.set(i, ord);
+                Order order = orders.get(i);
+                order.setStatus(status);
+                orders.set(i, order);
                 break;
             }
         }
@@ -59,6 +66,7 @@ public class OrderRepo implements Repository<Order> {
     public void loadData() {
         // load orders
         ArrayList<Product> orderItems = new ArrayList<>();
+
         orderItems.add(new Product());
         Order simpleOrder1 = new SimpleOrder(new Customer(),  orderItems);
         orders.add(simpleOrder1);

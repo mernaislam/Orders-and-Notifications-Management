@@ -1,6 +1,8 @@
 package app.controllers;
 
+import app.models.Orders.CompoundOrder;
 import app.models.Orders.Order;
+import app.models.Orders.SimpleOrder;
 import app.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,25 +17,24 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-    // Add a new order to OrderRepo
-    @PostMapping (path="/addOrder")
-    public void addOrder(@RequestBody Order order) { // doesn't work
-        // el json fel request body byrg3 Order object 3la tol bs mby3rfsh 3shan da abstract fa bygeb error
-        orderService.addOrder(order);
+    // Add a new simpleOrder to OrderRepo
+    @PostMapping (path="/placeOrder/simpleOrder")
+    public void addSimpleOrder(@RequestBody SimpleOrder order) { // works
+        orderService.addSimpleOrder(order);
+    }
+    // Add a new CompoundOrder to OrderRepo
+    @PostMapping (path="/placeOrder/compoundOrder")
+    public void addCompoundOrder(@RequestBody CompoundOrder order) { // works
+        orderService.addCompoundOrder(order);
     }
     // Delete an existing order
-    @DeleteMapping (path="/deleteOrder{id}")
+    @DeleteMapping (path="/deleteOrder/{id}")
     public void deleteOrder(@PathVariable(name = "id") int id) { // works
         orderService.deleteOrder(id);
     }
-    // Update an existing order
-    @PutMapping (path="/updateOrder{id}") // doesn't work
-    public void updateOrder(@RequestBody Order order, @PathVariable(name = "id") int id) {
-        // el json fel request body byrg3 Order object 3la tol bs mby3rfsh 3shan da abstract fa bygeb error
-        orderService.updateOrder(order, id);
-    }
+
     // Returns order by id
-    @GetMapping (path="/findOrder{id}")
+    @GetMapping (path="/findOrder/{id}")
     public Order getOrderById(@PathVariable(name = "id") int id) { // works
         //m3rfsh hena 7war <optional> da bayn
         return orderService.findOrderById(id);
@@ -42,5 +43,10 @@ public class OrderController {
     @GetMapping (path="/getOrders")
     public ArrayList<Order> getOrders() { // works
         return orderService.getOrders();
+    }
+    // Ships Order
+    @GetMapping (path="/shipOrder/{id}")
+    public void shipOrder(@PathVariable(name = "id") int id) { // works
+         orderService.shipOrder(id);
     }
 }
