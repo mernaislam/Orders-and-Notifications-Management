@@ -10,6 +10,9 @@ public class CustomerRepo implements Repository{
     public CustomerRepo() {
         loadData();
     }
+    public ArrayList<Customer> getCustomers() {
+        return customers;
+    }
 
     @Override
     public void add(Object object) {
