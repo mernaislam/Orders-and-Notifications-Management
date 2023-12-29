@@ -15,7 +15,7 @@ public class ProcessSimpleOrder extends ProcessOrder{
     }
 
     @Override
-    public void calculateShipmentFees(Order order) {
+    public void calculateShippingFees(Order order) {
         // should be calculated based on customer's city (random for now)
         double shippingFees = new Random().nextDouble() * (100.0 - 50.0) + 50.0;
         order.setShippingFees(shippingFees);

@@ -22,10 +22,11 @@ public class Customer {
 
     // generate random customer
     public Customer(){
+        // id should be generated automatically
         this.name = "Name";
         this.username = "Username";
         this.password = String.valueOf(new Random().nextInt() * (9999 - 1000) + 1000);
-        this.email = "Email";
+        this.email = "name@email.com";
         this.shippingAddress = "Shipping Address";
         this.city = "City";
         this.phoneNumber = "Phone Number";

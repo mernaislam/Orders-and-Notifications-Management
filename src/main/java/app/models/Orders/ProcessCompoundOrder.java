@@ -21,7 +21,7 @@ public class ProcessCompoundOrder extends ProcessOrder{
     }
 
     @Override
-    public void calculateShipmentFees(Order order) {
+    public void calculateShippingFees(Order order) {
         // should be calculated based on customer's city (random for now)
         double totalShippingFees = 0;
         CompoundOrder compoundOrder = (CompoundOrder) order;

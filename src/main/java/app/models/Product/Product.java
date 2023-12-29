@@ -19,6 +19,7 @@ public class Product {
 
     public Product(){
         // generate random product
+        // id should be generated automatically
         this.serialNumber = "Serial Number";
         this.name = "Name";
         this.vendor = "Vendor";
@@ -27,7 +28,8 @@ public class Product {
     }
 
     public Product(String name, String vendor, Category category, double price) {
-        // serialNumber should be generated automatically
+        // id should be generated automatically
+        this.serialNumber = "Serial Number";
         this.name = name;
         this.vendor = vendor;
         this.category = category;

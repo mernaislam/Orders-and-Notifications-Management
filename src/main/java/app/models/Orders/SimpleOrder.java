@@ -6,10 +6,7 @@ import app.models.Product.Product;
 import java.util.ArrayList;
 
 public class SimpleOrder extends Order{
-    public SimpleOrder(){
-        // generate random simple order
-        super();
-    }
+
     public SimpleOrder(Customer customer, ArrayList<Product> products) {
         super(customer, products);
     }
