@@ -4,6 +4,6 @@ public class SMS implements NotificationChannel {
     @Override
     public void sendNotification(NotificationTemplate notification, int userID) {
         // Simulate sending SMS
-        System.out.println("Sending SMS to customer " + userID + " with message: \n" + notification.getText());
+        // "Sending SMS to customer " + userID + " with message: \n" + notification.getText();
     }
 }

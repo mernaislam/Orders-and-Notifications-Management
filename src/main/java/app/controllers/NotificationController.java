@@ -12,12 +12,12 @@ import java.util.Queue;
 @RestController
 @RequestMapping(path="/app/notifications")
 public class NotificationController {
+
     private final NotificationTemplateService templateService;
     @Autowired
     public NotificationController(NotificationTemplateService templateService) {
         this.templateService = templateService;
     }
-
     // return notifications queue
     @GetMapping (path="/getNotifications")
     public Queue<NotificationTemplate> getNotifications() {
@@ -28,5 +28,8 @@ public class NotificationController {
     public String getTemplateStatistics() {
         return templateService.getTemplateStatistics();
     }
-
+    @GetMapping (path="/getStatistics")
+    public String getStatistics() {
+        return templateService.getStatistics();
+    }
 }

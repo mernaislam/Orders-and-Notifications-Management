@@ -1,6 +1,5 @@
 package app.repos;
 
-import app.models.Notification.NotificationChannel;
 import app.models.Notification.NotificationTemplate;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,9 @@ import java.util.Queue;
 public class NotificationTemplateRepo{
     private Queue<NotificationTemplate> notificationsQueue = new LinkedList<>();
 
-    //private HashMap<NotificationChannel, >channelCount = new HashMap<>(); // for statistics
+    private HashMap<String, Integer> SMSChannelCount = new HashMap<>(); // for statistics
+    private HashMap<String, Integer>emailChannelCount = new HashMap<>(); // for statistics
+
     private HashMap<NotificationTemplate, Integer> notificationTemplateCount = new HashMap<>(); // for statistics
 
     public NotificationTemplateRepo() {
@@ -31,8 +32,16 @@ public class NotificationTemplateRepo{
     public Queue<NotificationTemplate> getAllNotifications() {
         return notificationsQueue;
     }
-    public HashMap<NotificationTemplate, Integer> getAllNotificationCount() {
+    public HashMap<NotificationTemplate, Integer> getAllTemplateCount() {
         return notificationTemplateCount;
+    }
+
+    public HashMap<String, Integer> getSMSChannelCount() {
+        return SMSChannelCount;
+    }
+
+    public HashMap<String, Integer> getEmailChannelCount() {
+        return emailChannelCount;
     }
 
     public void updateNotificationCount(NotificationTemplate notification){
@@ -43,9 +52,21 @@ public class NotificationTemplateRepo{
             notificationTemplateCount.put(notification, 1);
         }
     }
-
-    public void updateChannelCount(NotificationChannel channel){
-
+    public void updateEmailChannelCount(String Email){
+        if (emailChannelCount.containsKey(Email)){
+            emailChannelCount.put(Email, emailChannelCount.get(Email) + 1);
+        }
+        else {
+            emailChannelCount.put(Email, 1);
+        }
+    }
+    public void updateSMSChannelCount(String phoneNumber){
+        if (SMSChannelCount.containsKey(phoneNumber)){
+            SMSChannelCount.put(phoneNumber, SMSChannelCount.get(phoneNumber) + 1);
+        }
+        else {
+            SMSChannelCount.put(phoneNumber, 1);
+        }
     }
 
 }
