@@ -7,11 +7,7 @@ public interface Repository<T> {
 
     public void delete(int objectID);
 
-    public void delete(T object);
-
     public void update(T object, int objectID);
-
-    public void save(T object);
 
     public T findByID(int objectID);
 

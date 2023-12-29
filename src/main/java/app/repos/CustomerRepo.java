@@ -12,32 +12,35 @@ public class CustomerRepo implements Repository<Customer> {
     }
 
     @Override
-    public void add(Customer cust) {
-
+    public void add(Customer customer) {
+        customers.add(customer);
     }
 
     @Override
-    public void delete(int custID) {
-
+    public void delete(int customerID) {
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).getCustomerID() == customerID) {
+                customers.remove(i);
+                break;
+            }
+        }
+    }
+    @Override
+    public void update(Customer customer, int customerID) {
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).getCustomerID() == customerID) {
+                customers.set(i, customer);
+                break;
+            }
+        }
     }
 
     @Override
-    public void delete(Customer cust) {
-
-    }
-
-    @Override
-    public void update(Customer cust, int custID) {
-
-    }
-
-    @Override
-    public void save(Customer cust) {
-
-    }
-
-    @Override
-    public Customer findByID(int custID) {
+    public Customer findByID(int customerID) {
+        for (Customer customer : customers) {
+            if (customer.getCustomerID() == customerID)
+                return customer;
+        }
         return null;
     }
 
@@ -58,5 +61,12 @@ public class CustomerRepo implements Repository<Customer> {
                 "merna12", "merna@email.com",
                 "2,Street 50", "Giza",
                 "0123356782", 250.0));
+        customers.add(new Customer(
+                "Waleed", "snowkaai",
+                "s123", "waleed@email.com",
+                "3,Street 70", "Cairo",
+                "0123123123", 1000.0));
+        customers.add(new Customer());
+        customers.add(new Customer());
     }
 }

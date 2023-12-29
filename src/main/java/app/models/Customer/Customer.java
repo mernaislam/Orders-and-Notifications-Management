@@ -1,6 +1,15 @@
 package app.models.Customer;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Random;
+
+@Entity
 public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int customerID;
     private String name;
     private String username;
@@ -10,6 +19,18 @@ public class Customer {
     private String city;
     private String phoneNumber;
     private Double balance;
+
+    // generate random customer
+    public Customer(){
+        this.name = "Name";
+        this.username = "Username";
+        this.password = String.valueOf(new Random().nextInt() * (9999 - 1000) + 1000);
+        this.email = "Email";
+        this.shippingAddress = "Shipping Address";
+        this.city = "City";
+        this.phoneNumber = "Phone Number";
+        this.balance = new Random().nextDouble() * (10000.0 - 100.0) + 100.0;
+    }
 
     public Customer(String name, String username, String password, String email, String shippingAddress,
                     String city, String phoneNumber, Double balance) {
