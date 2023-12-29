@@ -6,18 +6,25 @@ import app.models.Product.Product;
 import java.util.ArrayList;
 
 public class CompoundOrder extends Order{
-    private ArrayList<Order> orders = new ArrayList<>();
+    private ArrayList<SimpleOrder> orders = new ArrayList<>();
 
-    public CompoundOrder(Customer customer, ArrayList<Product> products, ArrayList<Order> orders) {
+    public CompoundOrder(Customer customer, ArrayList<Product> products, ArrayList<SimpleOrder> orders) {
         super(customer, products);
         this.orders = orders;
     }
 
-    public ArrayList<Order> getOrders() {
+    public ArrayList<SimpleOrder> getOrders() {
         return orders;
     }
 
-    public void setOrders(ArrayList<Order> orders) {
+    public void setOrders(ArrayList<SimpleOrder> orders) {
         this.orders = orders;
+    }
+    @Override
+    public void setStatus(OrderStatus status) {
+        super.setStatus(status);
+        for(SimpleOrder order : orders){
+            order.setStatus(status);
+        }
     }
 }
