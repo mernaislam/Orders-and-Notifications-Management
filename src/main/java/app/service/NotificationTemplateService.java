@@ -19,12 +19,6 @@ public class NotificationTemplateService {
 
     private final NotificationTemplateRepo notificationRepo;
 
-//    @Autowired
-//    public NotificationTemplateService(NotificationTemplateRepo notificationRepo, NotificationChannel channel) {
-//        this.notificationRepo = notificationRepo;
-//        this.channel = channel; // error
-//    }
-
     @Autowired
     public NotificationTemplateService(NotificationTemplateRepo notificationRepo) {
         this.notificationRepo = notificationRepo;
@@ -43,11 +37,19 @@ public class NotificationTemplateService {
             case ORDER_PLACEMENT ->  notification = new OrderPlacementNotification(language, order);
             case ORDER_SHIPMENT -> notification = new OrderShipmentNotification(language, order);
         };
-        notification.createTemplate();
-        notificationRepo.addNotification(notification);
-        sendNotification(notification, customerID);
-        notificationRepo.deleteLastNotification();
-        // update most notified email address/sms number
+        NotificationTemplate sendNotification = notification;
+        new Thread(new Runnable() {
+            // run in new thread so the request doesn't wait for the notification to be sent
+            @Override
+            public void run() {
+                sendNotification.createTemplate();
+                notificationRepo.addNotification(sendNotification);
+                sendNotification(sendNotification, customerID);
+                notificationRepo.deleteLastNotification();
+                // update most notified email address/sms number
+            }
+        }).start();
+
     }
 
     public void sendNotification(NotificationTemplate notificationToSend, int customerID){
@@ -71,7 +73,7 @@ public class NotificationTemplateService {
             }
         }
         if (mostNotified != null) {
-            mostNotifiedTemplate += "Most Notified: " + mostNotified.getText();
+            mostNotifiedTemplate += "Most Notified Notification Template: " + mostNotified.getText();
             mostNotifiedTemplate += "\nNumber of times notified: " + mx;
         }
         return mostNotifiedTemplate;

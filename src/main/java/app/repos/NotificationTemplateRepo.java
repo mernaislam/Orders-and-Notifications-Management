@@ -48,7 +48,4 @@ public class NotificationTemplateRepo{
 
     }
 
-//    public void loadData() {
-//
-//    }
 }

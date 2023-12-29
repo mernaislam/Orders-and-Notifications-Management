@@ -17,10 +17,6 @@ public class NotificationController {
     public NotificationController(NotificationTemplateService templateService) {
         this.templateService = templateService;
     }
-//    @PostMapping(path="/addNotification")
-//    public void addNotification(@RequestBody NotificationSubject subject, @RequestBody Order order) {
-//        templateService.generateNotification(subject, order);
-//    }
 
     // return notifications queue
     @GetMapping (path="/getNotifications")
@@ -28,13 +24,9 @@ public class NotificationController {
         return templateService.getNotificationTemplates();
     }
     // return template statistics
-    @GetMapping (path="/getNotificationsStatistics")
-    public String getNotificationsStatistics() {
+    @GetMapping (path="/getTemplateStatistics")
+    public String getTemplateStatistics() {
         return templateService.getTemplateStatistics();
     }
-    // test
-    @GetMapping (path="/getNotificationsSize")
-    public Integer getNotificationsSize() {
-        return templateService.getNotificationTemplates().size();
-    }
+
 }
