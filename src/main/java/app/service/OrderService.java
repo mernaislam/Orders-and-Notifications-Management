@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -42,8 +41,9 @@ public class OrderService {
         if (order.getStatus() == OrderStatus.INVALID) {
             return;
         }
-        // create el notification subject placeOrder
+        notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
+        orderRepo.updateStatus(OrderStatus.PLACED, order.getOrderID());
     }
     public void addCompoundOrder(CompoundOrder order) {
         ProcessOrder orderProcessor = new ProcessCompoundOrder(this, productRepo);
@@ -51,17 +51,9 @@ public class OrderService {
         if (order.getStatus() == OrderStatus.INVALID) {
             return;
         }
-
-        // create el notification subject placeOrder
+        notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
-    }
-
-    public void cancelOrder(int id) {
-        if (orderRepo.findByID(id) == null) {
-            return;
-        }
-        // order cancelled notification
-        orderRepo.delete(id);
+        orderRepo.updateStatus(OrderStatus.PLACED, order.getOrderID());
     }
 
     public void shipOrder(int id) {
@@ -71,6 +63,14 @@ public class OrderService {
             return;
         notificationService.generateNotification(NotificationSubject.ORDER_SHIPMENT, order);
         orderRepo.updateStatus(OrderStatus.SHIPPED, id);
+    }
+    public void cancelPlacement(int id) {
+        Order order = orderRepo.findByID(id);
+        if (order == null) {
+            return;
+        }
+        notificationService.generateNotification(NotificationSubject.PLACEMENT_CANCELLATION, order);
+        orderRepo.delete(id);
     }
     public void cancelShipment(int id) {
         // create el notification subject cancelShipment law hn3ml
