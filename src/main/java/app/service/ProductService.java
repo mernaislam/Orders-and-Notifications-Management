@@ -14,8 +14,8 @@ import java.util.Random;
 public class ProductService {
     private final ProductRepo productRepo;
     @Autowired
-    public ProductService() {
-        this.productRepo = new ProductRepo();
+    public ProductService(ProductRepo productRepo) {
+        this.productRepo = productRepo;
     }
     public Product findProductById(int id) {
         return productRepo.findByID(id);
