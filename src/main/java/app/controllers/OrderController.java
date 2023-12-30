@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping(path="/app/order")
+@RequestMapping(path="/api/order")
 public class OrderController {
     private final OrderService orderService;
     @Autowired
@@ -30,7 +30,7 @@ public class OrderController {
     // Delete an existing order
     @DeleteMapping (path="/deleteOrder/{id}")
     public void deleteOrder(@PathVariable(name = "id") int id) { // works
-        orderService.deleteOrder(id);
+        orderService.cancelOrder(id);
     }
 
     // Returns order by id
