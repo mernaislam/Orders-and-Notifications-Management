@@ -14,7 +14,7 @@ import java.util.Random;
 
 @Service
 public class OrderService {
-    private final OrderRepo orderRepo;
+    private OrderRepo orderRepo;
     private final NotificationTemplateService notificationService;
     private final CustomerRepo customerRepo;
     private final ProductRepo productRepo;
@@ -97,6 +97,7 @@ public class OrderService {
         return value;
     }
     public Customer getCustomer(String customerUsername){
+        orderRepo = new OrderRepo();
         return customerRepo.findByUsername(customerUsername);
     }
 

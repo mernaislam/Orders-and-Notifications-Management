@@ -19,12 +19,10 @@ public class NotificationTemplateService {
     private final int CONFIGURED_TIME = 5; // Default value is 5 seconds
 
     private final NotificationTemplateRepo notificationRepo;
-    private final OrderService orderService;
 
     @Autowired
-    public NotificationTemplateService(NotificationTemplateRepo notificationRepo, OrderService orderService) {
+    public NotificationTemplateService(NotificationTemplateRepo notificationRepo) {
         this.notificationRepo = notificationRepo;
-        this.orderService = orderService;
     }
 
     public Queue<NotificationTemplate> getNotificationTemplates() {

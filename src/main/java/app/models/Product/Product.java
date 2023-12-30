@@ -46,7 +46,6 @@ public class Product {
         this.productID = productService.generateProductId();
         this.quantity = quantity;
     }
-
     public int getProductID() {
         return productID;
     }

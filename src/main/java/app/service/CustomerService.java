@@ -13,7 +13,6 @@ import java.util.Random;
 public class CustomerService {
     private final CustomerRepo customerRepo;
 
-    @Autowired
     public CustomerService() {
         this.customerRepo = new CustomerRepo();
     }
