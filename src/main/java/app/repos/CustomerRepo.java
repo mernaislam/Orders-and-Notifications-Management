@@ -53,19 +53,19 @@ public class CustomerRepo implements Repository<Customer> {
 
     @Override
     public void loadData() {
-        customers.add(new Customer(
+        customers.add(new Customer(1,
                 "Nada Mohamed", "nadaamohhamed",
                 "123456789", "nada@email.com",
                 "6,Street 9", "Cairo",
                 "01234256781", 500.0));
 
-        customers.add(new Customer(
+        customers.add(new Customer(2,
                 "Merna Islam", "mernaislam",
                 "merna12", "merna@email.com",
                 "2,Street 50", "Giza",
                 "0123356782", 250.0));
 
-        customers.add(new Customer(
+        customers.add(new Customer(3,
                 "Waleed", "snowkaai",
                 "s123", "waleed@email.com",
                 "3,Street 70", "Cairo",
