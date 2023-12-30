@@ -1,5 +1,6 @@
 package app.repos;
 
+import app.models.Customer.Address;
 import app.models.Customer.Customer;
 import org.springframework.stereotype.Component;
 
@@ -63,19 +64,19 @@ public class CustomerRepo implements Repository<Customer> {
         customers.add(new Customer(0,
                 "Nada Mohamed", "nadaamohhamed",
                 "123456789", "nada@email.com",
-                "6,Street 9", "Cairo",
+                new Address("Cairo", 11, 5),
                 "01234256781", 500.0));
 
         customers.add(new Customer(1,
                 "Merna Islam", "mernaislam",
                 "merna12", "merna@email.com",
-                "2,Street 50", "Giza",
+                new Address("Giza", 15, 2),
                 "0123356782", 250.0));
 
         customers.add(new Customer(2,
                 "Waleed", "snowkaai",
                 "s123", "waleed@email.com",
-                "3,Street 70", "Cairo",
+                new Address("Cairo", 9, 300),
                 "0123123123", 1000.0));
     }
 }
