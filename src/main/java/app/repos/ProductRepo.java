@@ -78,7 +78,6 @@ public class ProductRepo implements Repository<Product> {
         products.add(new Product(2,"Banana", "Vendor", Category.CATEGORY1, 5.0, 10));
         products.add(new Product(3,"Milk", "Vendor", Category.CATEGORY2, 20.0, 10));
         products.add(new Product(4,"Cheese", "Vendor", Category.CATEGORY3, 15.0, 10));
-        products.add(new Product());
     }
 
 

@@ -29,20 +29,22 @@ public class Product {
         this.quantity = (int) (new Random().nextDouble() * (100.0 - 5.0) + 5.0);
     }
 
-    public Product(int id, String name, String vendor, Category category, double price) {
+    public Product(int id, String name, String vendor, Category category, double price, int quantity) {
         this.name = name;
         this.vendor = vendor;
         this.category = category;
         this.price = price;
         this.productID = id;
+        this.quantity = quantity;
     }
-    public Product(String name, String vendor, Category category, double price) {
+    public Product(String name, String vendor, Category category, double price, int quantity) {
         this.name = name;
         this.vendor = vendor;
         this.category = category;
         this.price = price;
         ProductService productService = new ProductService();
         this.productID = productService.generateProductId();
+        this.quantity = quantity;
     }
 
     public int getProductID() {
