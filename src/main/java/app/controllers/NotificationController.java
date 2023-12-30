@@ -18,19 +18,19 @@ public class NotificationController {
     public NotificationController(NotificationTemplateService templateService) {
         this.templateService = templateService;
     }
-    // return notifications queue
+    // return notifications queue - list of the current content of the queue
     @GetMapping (path="/getNotifications")
     public Queue<NotificationTemplate> getNotifications() {
         return templateService.getNotificationTemplates();
     }
-    // return template statistics
+    // return  most notified template - statistics
     @GetMapping (path="/getTemplateStatistics")
     public String getTemplateStatistics() {
         return templateService.getTemplateStatistics();
     }
-    // return channel statistics
+    // return most notified channel - statistics
     @GetMapping (path="/getChannelStatistics")
-    public String getStatistics() {
+    public String getChannelStatistics() {
         return templateService.getChannelStatistics();
     }
 }
