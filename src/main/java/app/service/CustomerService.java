@@ -13,6 +13,7 @@ import java.util.Random;
 public class CustomerService {
     private final CustomerRepo customerRepo;
 
+    @Autowired
     public CustomerService() {
         this.customerRepo = new CustomerRepo();
     }
@@ -127,13 +128,5 @@ public class CustomerService {
         return true;
     }
 
-    public int generateCustomerId(){
-        Random random = new Random();
-        int value = random.nextInt(100000 - 1);
-        while(!uniqueId(value)){
-            value = random.nextInt(100000 - 1);
-        }
-        return value;
-    }
 
 }

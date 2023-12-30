@@ -6,6 +6,7 @@ import app.models.Notification.*;
 import app.models.Orders.Order;
 import app.repos.NotificationTemplateRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 
@@ -20,6 +21,7 @@ public class NotificationTemplateService {
 
     private final NotificationTemplateRepo notificationRepo;
 
+    @Lazy
     @Autowired
     public NotificationTemplateService() {
         this.notificationRepo = new NotificationTemplateRepo();

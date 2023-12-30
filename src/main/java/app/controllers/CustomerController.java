@@ -20,6 +20,7 @@ public class CustomerController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
     CustomerController(){
          customerService = new CustomerService() ;
     }
@@ -52,8 +53,8 @@ public class CustomerController {
         return exceptionController.GlobalException(exception);
     }
 
-    @GetMapping("/testing")
-    String verifyToken(@RequestHeader("Authorization") String token) throws GlobalException {
-        return jwtTokenUtil.getUsernameFromToken(token.substring(7));
+    @GetMapping("/customer/{id}")
+    Customer verifyToken(@PathVariable int id) {
+        return customerService.findCustomerById(id);
     }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CompoundOrder extends Order{
-    private ArrayList<SimpleOrder> orders = new ArrayList<>();
+    private ArrayList<SimpleOrder> orders;
 
     public CompoundOrder(String customerUsername, ArrayList<SimpleOrder> orders) {
         super(customerUsername);

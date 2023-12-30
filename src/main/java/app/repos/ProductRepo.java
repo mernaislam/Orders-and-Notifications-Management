@@ -2,6 +2,7 @@ package app.repos;
 
 import app.models.Product.Category;
 import app.models.Product.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class ProductRepo implements Repository<Product> {
     private HashMap<Category, Integer> categoryCount = new HashMap<>();
     private ArrayList<Product> products = new ArrayList<>();
 
+    @Autowired
     public ProductRepo() {
         loadData();
     }

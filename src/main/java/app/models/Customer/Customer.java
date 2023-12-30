@@ -15,18 +15,6 @@ public class Customer {
     private String phoneNumber;
     private Double balance;
 
-    // generate random customer
-    public Customer(){
-        // id should be generated automatically
-        this.name = "Name";
-        this.username = "Username";
-        this.password = String.valueOf(new Random().nextInt() * (9999 - 1000) + 1000);
-        this.email = "name@email.com";
-//        this.shippingAddress = "Shipping Address";
-        this.phoneNumber = "Phone Number";
-        this.balance = new Random().nextDouble() * (10000.0 - 100.0) + 100.0;
-    }
-
     public Customer(String name, String username, String password, String email, Address shippingAddress,
                     String phoneNumber, Double balance) {
         this.name = name;
@@ -36,8 +24,7 @@ public class Customer {
         this.shippingAddress = shippingAddress;
         this.phoneNumber = phoneNumber;
         this.balance = balance;
-        CustomerService customerService = new CustomerService();
-        this.customerID = customerService.generateCustomerId();
+        this.customerID = getCustomerId();
     }
 
     public Customer(int id, String name, String username, String password, String email, Address shippingAddress,
@@ -85,5 +72,11 @@ public class Customer {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+    public int getCustomerId(){
+        Random random = new Random();
+        return random.nextInt(100000 - 1);
+    }
+
 
 }

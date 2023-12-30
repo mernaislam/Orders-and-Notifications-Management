@@ -30,7 +30,7 @@ public class OrderController {
 
     // Add a new simpleOrder to OrderRepo
     @PostMapping (path="/placeOrder/simpleOrder")
-    public ResponseEntity<ResponseEntityStructure> addSimpleOrder(@RequestBody SimpleOrder order, @RequestHeader("Authorization") String token) throws GlobalException { // works
+    public ResponseEntity<ResponseEntityStructure> addSimpleOrder(@RequestBody SimpleOrder order, @RequestHeader("Authorization") String token) {
         GlobalException exception;
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
             orderService.addSimpleOrder(order);
@@ -47,8 +47,19 @@ public class OrderController {
 
     // Add a new CompoundOrder to OrderRepo
     @PostMapping (path="/placeOrder/compoundOrder")
-    public void addCompoundOrder(@RequestBody CompoundOrder order) { // works
-        orderService.addCompoundOrder(order);
+    public ResponseEntity<ResponseEntityStructure> addCompoundOrder(@RequestBody CompoundOrder order, @RequestHeader("Authorization") String token) {
+        GlobalException exception;
+        if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
+            orderService.addCompoundOrder(order);
+            if(order.getStatus() == OrderStatus.PLACED){
+                exception = new GlobalException("Order placed Successfully", HttpStatus.OK);
+            } else {
+                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities]", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            exception = new GlobalException("No such username exists, try again", HttpStatus.BAD_REQUEST);
+        }
+        return exceptionController.GlobalException(exception);
     }
 
     // Delete an existing order
@@ -59,14 +70,26 @@ public class OrderController {
 
     // Returns order by id
     @GetMapping (path="/order/{id}")
-    public Order getOrderById(@PathVariable(name = "id") int id) { // works
-        return orderService.findOrderById(id);
+    public Object getOrderById(@PathVariable(name = "id") int id) { // works
+        Order order = orderService.findOrderById(id);
+        if(order == null){
+            GlobalException exception = new GlobalException("Invalid order id", HttpStatus.BAD_REQUEST);
+            return exceptionController.GlobalException(exception);
+        } else {
+            return order;
+        }
     }
 
     // Returns list of orders
     @GetMapping (path="/order")
-    public ArrayList<Order> getOrders() { // works
-        return orderService.getOrders();
+    public Object getOrders() { // works
+        ArrayList<Order> orders = orderService.getOrders();
+        if(orders == null){
+            GlobalException exception = new GlobalException("No Orders are placed yet", HttpStatus.BAD_REQUEST);
+            return exceptionController.GlobalException(exception);
+        } else {
+            return orders;
+        }
     }
 
     // Ships Order
