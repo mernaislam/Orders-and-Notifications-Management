@@ -3,7 +3,6 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationSubject;
 import app.models.Orders.*;
-import app.models.Product.Product;
 import app.repos.CustomerRepo;
 import app.repos.OrderRepo;
 import app.repos.ProductRepo;
@@ -19,6 +18,10 @@ public class OrderService {
     private final NotificationTemplateService notificationService;
     private final CustomerRepo customerRepo;
     private final ProductRepo productRepo;
+
+    // for testing made 1 minute, but in real life it should be at least 30 minutes or 1 hour
+    private final int PRECONFIGURED_TIME = 60; // Default value is 60 seconds - 1 minute
+
     @Autowired
     public OrderService(OrderRepo orderRepo, NotificationTemplateService notificationService, CustomerRepo customerRepo, ProductRepo productRepo) {
         this.orderRepo = orderRepo;
@@ -35,48 +38,71 @@ public class OrderService {
         return orderRepo.getAll();
     }
 
-    public void addSimpleOrder(SimpleOrder order) {
+    public boolean addSimpleOrder(SimpleOrder order) {
         ProcessOrder orderProcessor = new ProcessSimpleOrder(this, productRepo);
         orderProcessor.processOrder(order);
         if (order.getStatus() == OrderStatus.INVALID) {
-            return;
+            return false;
         }
         notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
-        orderRepo.updateStatus(OrderStatus.PLACED, order.getOrderID());
+        return true;
     }
-    public void addCompoundOrder(CompoundOrder order) {
+    public boolean addCompoundOrder(CompoundOrder order) {
         ProcessOrder orderProcessor = new ProcessCompoundOrder(this, productRepo);
         orderProcessor.processOrder(order);
         if (order.getStatus() == OrderStatus.INVALID) {
-            return;
+            return false;
         }
         notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
-        orderRepo.updateStatus(OrderStatus.PLACED, order.getOrderID());
+        return true;
     }
 
-    public void shipOrder(int id) {
+    public boolean shipOrder(int id) {
         // create el notification subject shipOrder
         Order order = orderRepo.findByID(id);
-        if (order == null)
-            return;
+        // check if order is placed before shipping
+        if(!(order.getStatus() == OrderStatus.PLACED))
+            return false;
         notificationService.generateNotification(NotificationSubject.ORDER_SHIPMENT, order);
         orderRepo.updateStatus(OrderStatus.SHIPPED, id);
+        // once the order is shipped, start a timer for preconfigured time
+        new Thread(new Runnable() {
+            // run in new thread so the request thread doesn't wait for preconfigured time and stops
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(PRECONFIGURED_TIME * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                order.setPreconfiguredTimeFinished(true);
+            }
+        }).start();
+        return true;
     }
-    public void cancelPlacement(int id) {
+    public boolean cancelPlacement(int id) {
         Order order = orderRepo.findByID(id);
-        if (order == null) {
-            return;
-        }
+        // check if order is placed before cancelling
+        if(!(order.getStatus() == OrderStatus.PLACED))
+            return false;
         notificationService.generateNotification(NotificationSubject.PLACEMENT_CANCELLATION, order);
         orderRepo.delete(id);
+        return true;
     }
-    public void cancelShipment(int id) {
-        // create el notification subject cancelShipment law hn3ml
-
-        //condition 2n fe configuered time m3dash men sa3t ma el order et3mlo ship
-        orderRepo.updateStatus(OrderStatus.PLACED, id);
+    public boolean cancelShipment(int id) {
+        Order order = orderRepo.findByID(id);
+        // check if order is shipped before cancelling
+        if(!(order.getStatus() == OrderStatus.SHIPPED))
+            return false;
+        // cancel only if preconfigured time isn't finished yet
+       if(!order.isPreconfiguredTimeFinished()) {
+           notificationService.generateNotification(NotificationSubject.SHIPMENT_CANCELLATION, order);
+           orderRepo.updateStatus(OrderStatus.PLACED, id);
+           return true;
+       }
+       return false;
     }
     public boolean orderExists(int id) {
         return orderRepo.findByID(id) != null;

@@ -17,7 +17,7 @@ import java.util.Queue;
 public class NotificationTemplateService {
     private NotificationChannel channel;
     private OrderService orderService;
-    private final int CONFIGURED_TIME = 5; // Default value is 5 seconds
+    private final int CONFIGURED_TIME = 30; // Default value is 30 seconds
 
     private final NotificationTemplateRepo notificationRepo;
 
