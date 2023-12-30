@@ -18,8 +18,8 @@ public class NotificationTemplateRepo{
         notificationsQueue.add(notificationTemplate);
     }
 
-    public void deleteLastNotification() {
-        notificationsQueue.poll();
+    public void deleteNotification(NotificationTemplate notificationTemplate) {
+        notificationsQueue.remove(notificationTemplate);
     }
 
     public Queue<NotificationTemplate> getAllNotifications() {

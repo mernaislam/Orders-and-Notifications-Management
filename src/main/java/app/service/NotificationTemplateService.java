@@ -58,7 +58,7 @@ public class NotificationTemplateService {
                 sendNotification.createTemplate();
                 notificationRepo.addNotification(sendNotification);
                 sendNotification(sendNotification, customerID);
-                notificationRepo.deleteLastNotification();
+                notificationRepo.deleteNotification(sendNotification);
             }
             }).start();
         }
