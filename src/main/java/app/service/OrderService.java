@@ -66,6 +66,10 @@ public class OrderService {
 
     public void shipOrder(int id) {
         // create el notification subject shipOrder
+        Order order = orderRepo.findByID(id);
+        if (order == null)
+            return;
+        notificationService.generateNotification(NotificationSubject.ORDER_SHIPMENT, order);
         orderRepo.updateStatus(OrderStatus.SHIPPED, id);
     }
     public void cancelShipment(int id) {

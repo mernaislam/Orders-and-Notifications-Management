@@ -13,23 +13,15 @@ import java.util.Queue;
 
 @Service
 public class NotificationTemplateService {
-    // SMS, Email channel depending on the customer, should be set
-    private NotificationChannel channel = new SMS();
+    private NotificationChannel channel;
     private final int CONFIGURED_TIME = 5; // Default value is 5 seconds
 
     private final NotificationTemplateRepo notificationRepo;
-
-//    @Autowired
-//    public NotificationTemplateService(NotificationTemplateRepo notificationRepo, NotificationChannel channel) {
-//        this.notificationRepo = notificationRepo;
-//        this.channel = channel; // error
-//    }
 
     @Autowired
     public NotificationTemplateService(NotificationTemplateRepo notificationRepo) {
         this.notificationRepo = notificationRepo;
     }
-
 
     public Queue<NotificationTemplate> getNotificationTemplates() {
         return notificationRepo.getAllNotifications();
@@ -37,17 +29,40 @@ public class NotificationTemplateService {
 
     public void generateNotification(NotificationSubject subject, Order order){
         int customerID = order.getCustomer().getCustomerID();
-        Language language = new EnglishLanguage(); // should get the language from the customer
+        Language language = new EnglishLanguage(); // assume english language is chosen
         NotificationTemplate notification = null;
         switch (subject) {
-            case ORDER_PLACEMENT ->  notification = new OrderPlacementNotification(language, order);
-            case ORDER_SHIPMENT -> notification = new OrderShipmentNotification(language, order);
+            case ORDER_PLACEMENT ->  {
+                notification = new OrderPlacementNotification(language, order);
+                channel = new Email(); // assume email channel is chosen
+            }
+            case ORDER_SHIPMENT -> {
+                notification = new OrderShipmentNotification(language, order);
+                channel = new SMS(); // assume sms channel is chosen
+            }
+            case ORDER_CANCELLATION -> {
+                notification = new OrderCancellationNotification(language, order);
+                channel = new Email(); // assume email channel is chosen
+            }
         };
-        notification.createTemplate();
-        notificationRepo.addNotification(notification);
-        sendNotification(notification, customerID);
-        notificationRepo.deleteLastNotification();
-        // update most notified email address/sms number
+        NotificationTemplate sendNotification = notification;
+        if(notification != null) {
+            new Thread(new Runnable() {
+            // run in new thread so the request thread doesn't wait for the notification to be sent and stops
+            @Override
+            public void run() {
+                // add to queue, send notification, remove from queue
+                sendNotification.createTemplate();
+                notificationRepo.addNotification(sendNotification);
+                sendNotification(sendNotification, customerID);
+                notificationRepo.deleteNotification(sendNotification);
+
+                // after it was sent successfully, update live statistics
+                notificationRepo.updateNotificationCount(sendNotification);
+                notificationRepo.updateChannelCount(channel);
+            }
+            }).start();
+        }
     }
 
     public void sendNotification(NotificationTemplate notificationToSend, int customerID){
@@ -60,25 +75,39 @@ public class NotificationTemplateService {
         channel.sendNotification(notificationToSend, customerID);
     }
     public String getTemplateStatistics(){
-        int mx = -999999;
+        int mx = 0;
         String mostNotifiedTemplate = "";
-        NotificationTemplate mostNotified = null;
-        HashMap<NotificationTemplate, Integer> notificationCount = notificationRepo.getAllNotificationCount();
-        for (NotificationTemplate key: notificationCount.keySet()) {
+        String mostNotified = null;
+        HashMap<String, Integer> notificationCount = notificationRepo.getAllTemplateCount();
+        for (String key: notificationCount.keySet()) {
             if (notificationCount.get(key) > mx) {
                 mx = notificationCount.get(key);
                 mostNotified = key;
             }
         }
         if (mostNotified != null) {
-            mostNotifiedTemplate += "Most Notified: " + mostNotified.getText();
+            mostNotifiedTemplate += "Most Notified Notification Template: " + mostNotified;
             mostNotifiedTemplate += "\nNumber of times notified: " + mx;
         }
         return mostNotifiedTemplate;
     }
 
-
-//    public void getChannelStatistics(){
-//    }
+    public String getChannelStatistics(){
+        int mx = 0;
+        String mostNotifiedChannel = "";
+        String mostNotified = null;
+        HashMap<String, Integer> channelCount = notificationRepo.getAllChannelCount();
+        for (String key: channelCount.keySet()) {
+            if (channelCount.get(key) > mx) {
+                mx = channelCount.get(key);
+                mostNotified = key;
+            }
+        }
+        if (mostNotified != null) {
+            mostNotifiedChannel += "Most Notified Notification Channel: " + mostNotified;
+            mostNotifiedChannel += "\nNumber of times notified: " + mx;
+        }
+        return mostNotifiedChannel;
+    }
 
 }

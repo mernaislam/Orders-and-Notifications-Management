@@ -11,44 +11,43 @@ import java.util.Queue;
 @Component
 public class NotificationTemplateRepo{
     private Queue<NotificationTemplate> notificationsQueue = new LinkedList<>();
-
-    //private HashMap<NotificationChannel, >channelCount = new HashMap<>(); // for statistics
-    private HashMap<NotificationTemplate, Integer> notificationTemplateCount = new HashMap<>(); // for statistics
-
-    public NotificationTemplateRepo() {
-//        loadData();
-    }
+    private HashMap<String, Integer> notificationTemplateCount = new HashMap<>(); // for statistics
+    private HashMap<String, Integer> channelCount = new HashMap<>(); // for statistics
 
     public void addNotification(NotificationTemplate notificationTemplate) {
         notificationsQueue.add(notificationTemplate);
-        updateNotificationCount(notificationTemplate);
     }
 
-    public void deleteLastNotification() {
-        notificationsQueue.poll();
+    public void deleteNotification(NotificationTemplate notificationTemplate) {
+        notificationsQueue.remove(notificationTemplate);
     }
 
     public Queue<NotificationTemplate> getAllNotifications() {
         return notificationsQueue;
     }
-    public HashMap<NotificationTemplate, Integer> getAllNotificationCount() {
+    public HashMap<String, Integer> getAllTemplateCount() {
         return notificationTemplateCount;
+    }
+    public HashMap<String, Integer> getAllChannelCount() {
+        return channelCount;
     }
 
     public void updateNotificationCount(NotificationTemplate notification){
-        if (notificationTemplateCount.containsKey(notification)){
-            notificationTemplateCount.put(notification, notificationTemplateCount.get(notification) + 1);
+        String notificationTemplateName = notification.getClass().getSimpleName();
+        if (notificationTemplateCount.containsKey(notificationTemplateName)){
+            notificationTemplateCount.put(notificationTemplateName, notificationTemplateCount.get(notificationTemplateName) + 1);
         }
         else {
-            notificationTemplateCount.put(notification, 1);
+            notificationTemplateCount.put(notificationTemplateName, 1);
         }
     }
-
     public void updateChannelCount(NotificationChannel channel){
-
+        String channelName = channel.getClass().getSimpleName();
+        if (channelCount.containsKey(channelName)){
+            channelCount.put(channelName, channelCount.get(channelName) + 1);
+        }
+        else {
+            channelCount.put(channelName, 1);
+        }
     }
-
-//    public void loadData() {
-//
-//    }
 }

@@ -71,4 +71,5 @@ public abstract class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
 }

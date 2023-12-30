@@ -2,18 +2,18 @@ package app.models.Notification;
 
 import app.models.Orders.Order;
 
-public class OrderShipmentNotification extends NotificationTemplate {
+public class OrderCancellationNotification extends NotificationTemplate{
     private Order order;
 
-    public OrderShipmentNotification(Language language, Order order) {
+    public OrderCancellationNotification(Language language, Order order) {
         super(language);
         this.order = order;
     }
 
     @Override
     public void generateText() {
-        this.text = "Hello {customerName}! Your order number #{orderID} has been successfully shipped." +
-                                                " You should receive your order in 3-4 business days :)";
+        this.text = "Hello {customerName}! Your order number #{orderID} has been successfully cancelled. " +
+                    "A full refund will be provided for your cancelled order. \nWe hope to see you again soon :(";
     }
 
     @Override

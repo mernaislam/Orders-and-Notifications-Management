@@ -6,11 +6,10 @@ public abstract class NotificationTemplate {
     protected String text;
     protected Language language;
     protected HashMap<String, String> placeholders = new HashMap<>();
-    protected int customerId;
+
     public NotificationTemplate(Language language){
         this.language = language;
     }
-
     public final void createTemplate(){
         // Template method - Skeleton
         generateText();
@@ -28,7 +27,6 @@ public abstract class NotificationTemplate {
             text = text.replace(key, placeholders.get(key));
         }
     }
-
     public String getText() {
         return text;
     }

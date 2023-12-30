@@ -12,29 +12,25 @@ import java.util.Queue;
 @RestController
 @RequestMapping(path="/app/notifications")
 public class NotificationController {
+
     private final NotificationTemplateService templateService;
     @Autowired
     public NotificationController(NotificationTemplateService templateService) {
         this.templateService = templateService;
     }
-//    @PostMapping(path="/addNotification")
-//    public void addNotification(@RequestBody NotificationSubject subject, @RequestBody Order order) {
-//        templateService.generateNotification(subject, order);
-//    }
-
-    // return notifications queue
+    // return notifications queue - list of the current content of the queue
     @GetMapping (path="/getNotifications")
     public Queue<NotificationTemplate> getNotifications() {
         return templateService.getNotificationTemplates();
     }
-    // return template statistics
-    @GetMapping (path="/getNotificationsStatistics")
-    public String getNotificationsStatistics() {
+    // return  most notified template - statistics
+    @GetMapping (path="/getTemplateStatistics")
+    public String getTemplateStatistics() {
         return templateService.getTemplateStatistics();
     }
-    // test
-    @GetMapping (path="/getNotificationsSize")
-    public Integer getNotificationsSize() {
-        return templateService.getNotificationTemplates().size();
+    // return most notified channel - statistics
+    @GetMapping (path="/getChannelStatistics")
+    public String getChannelStatistics() {
+        return templateService.getChannelStatistics();
     }
 }

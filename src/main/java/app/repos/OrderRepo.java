@@ -5,7 +5,6 @@ import app.models.Orders.Order;
 import app.models.Orders.OrderStatus;
 import app.models.Orders.SimpleOrder;
 import app.models.Product.Product;
-import jdk.jshell.Snippet;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ public class OrderRepo implements Repository<Order> {
 
     @Override
     public void delete(int ordID) {
-        System.out.println("delete order");
         for (int i = 0; i < orders.size(); i++) {
             if (orders.get(i).getOrderID() == ordID) {
                 orders.remove(i);
