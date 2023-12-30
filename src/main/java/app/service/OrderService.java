@@ -20,11 +20,11 @@ public class OrderService {
     private final ProductRepo productRepo;
 
     @Autowired
-    public OrderService(OrderRepo orderRepo, NotificationTemplateService notificationService, CustomerRepo customerRepo, ProductRepo productRepo) {
-        this.orderRepo = orderRepo;
-        this.notificationService = notificationService;
-        this.customerRepo = customerRepo;
-        this.productRepo = productRepo;
+    public OrderService() {
+        this.orderRepo = new OrderRepo();
+        this.notificationService = new NotificationTemplateService();
+        this.customerRepo = new CustomerRepo();
+        this.productRepo = new ProductRepo();
     }
 
     public Order findOrderById(int id) {

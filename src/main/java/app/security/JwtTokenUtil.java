@@ -23,17 +23,22 @@ public class JwtTokenUtil implements Serializable {
     private String secret;
 
     //retrieve username from jwt token
-    public String getUsernameFromToken(String token) throws GlobalException {
+    public String getUsernameFromToken(String token){
         return getClaimFromToken(token, Claims::getSubject);
     }
 
     //retrieve expiration date from jwt token
-    public Date getExpirationDateFromToken(String token) throws GlobalException {
+    public Date getExpirationDateFromToken(String token){
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) throws GlobalException {
-        final Claims claims = getAllClaimsFromToken(token);
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){
+        final Claims claims;
+        try {
+            claims = getAllClaimsFromToken(token);
+        } catch (GlobalException e) {
+            throw new RuntimeException(e);
+        }
         return claimsResolver.apply(claims);
     }
     //for retrieveing any information from token we will need the secret key
@@ -41,10 +46,10 @@ public class JwtTokenUtil implements Serializable {
         if (token == null)
             throw new GlobalException("Token is null", HttpStatus.UNAUTHORIZED);
         Jwts.parser();
-//        JwtParser parser = Jwts.parser().setSigningKey(secret).build();
+        JwtParser parser = Jwts.parser().setSigningKey(secret);
         try {
-//            Jws<Claims> x = parser.parseClaimsJws(token);
-//            return x.getBody();
+            Jws<Claims> x = parser.parseClaimsJws(token);
+            return x.getBody();
         } catch (ExpiredJwtException e) {
             throw new GlobalException("Token is expired", HttpStatus.UNAUTHORIZED);
         } catch (UnsupportedJwtException e) {
@@ -56,11 +61,10 @@ public class JwtTokenUtil implements Serializable {
         } catch (IllegalArgumentException e) {
             throw new GlobalException("Token is null", HttpStatus.UNAUTHORIZED);
         }
-        throw new GlobalException("Token is null", HttpStatus.UNAUTHORIZED);
     }
 
     //check if the token has expired
-    private Boolean isTokenExpired(String token) throws GlobalException {
+    private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -83,7 +87,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //validate token
-    public Boolean validateToken(String token, Customer userDetails) throws GlobalException {
+    public Boolean validateToken(String token, Customer userDetails){
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
