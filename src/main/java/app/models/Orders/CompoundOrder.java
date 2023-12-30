@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class CompoundOrder extends Order{
     private ArrayList<SimpleOrder> orders = new ArrayList<>();
 
-    public CompoundOrder(Customer customer, ArrayList<SimpleOrder> orders) {
-        super(customer);
+    public CompoundOrder(String customerUsername, ArrayList<SimpleOrder> orders) {
+        super(customerUsername);
         this.orders = orders;
     }
 

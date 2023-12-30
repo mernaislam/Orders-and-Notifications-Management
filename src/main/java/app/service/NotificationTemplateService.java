@@ -1,6 +1,7 @@
 package app.service;
 
 
+import app.models.Customer.Customer;
 import app.models.Notification.*;
 import app.models.Orders.Order;
 import app.repos.NotificationTemplateRepo;
@@ -14,6 +15,7 @@ import java.util.Queue;
 @Service
 public class NotificationTemplateService {
     private NotificationChannel channel;
+    private OrderService orderService;
     private final int CONFIGURED_TIME = 5; // Default value is 5 seconds
 
     private final NotificationTemplateRepo notificationRepo;
@@ -28,7 +30,8 @@ public class NotificationTemplateService {
     }
 
     public void generateNotification(NotificationSubject subject, Order order){
-        int customerID = order.getCustomer().getCustomerID();
+        Customer customer = orderService.getCustomer(order.getCustomerUsername());
+        int customerID = customer.getCustomerID();
         Language language = new EnglishLanguage(); // assume english language is chosen
         NotificationTemplate notification = null;
         switch (subject) {

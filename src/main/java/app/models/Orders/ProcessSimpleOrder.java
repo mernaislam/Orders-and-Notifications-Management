@@ -1,5 +1,6 @@
 package app.models.Orders;
 
+import app.models.Customer.Customer;
 import app.models.Product.Product;
 import app.repos.ProductRepo;
 import app.service.OrderService;
@@ -40,16 +41,17 @@ public class ProcessSimpleOrder extends ProcessOrder {
     @Override
     public void validateOrder(Order ord) {
         SimpleOrder order = (SimpleOrder) ord;
+        Customer customer = orderService.getCustomer(ord.getCustomerUsername());
 //         law el order rg3ly status invalid m3mlosh add
         ord.setStatus(OrderStatus.INVALID);
         if (orderService.orderExists(order.getOrderID())
-            || !orderService.userExists(order.getCustomer().getCustomerID())
-            || !orderService.hasMoney(order.getCustomer(), order.getTotalPrice())){
+            || customer == null
+            || !orderService.hasMoney(customer, order.getTotalPrice())){
             return;
         }
         for (Product p : order.getProducts()) {
             Product repoProduct = productRepo.findByID(p.getProductID());
-            //                                      quantity el m3aya  - quantity el hashtreha
+            //  Product quantity  -  order placement product quantity
             if (repoProduct == null || repoProduct.getQuantity() - p.getQuantity() < 0) {
                 return;
             }
@@ -58,11 +60,11 @@ public class ProcessSimpleOrder extends ProcessOrder {
         for (Product p : order.getProducts()) {
             Product repoProduct = productRepo.findByID(p.getProductID());
             repoProduct.setQuantity(repoProduct.getQuantity() - p.getQuantity());
-            if (repoProduct.getQuantity()== 0) {
+            if (repoProduct.getQuantity() == 0) {
                 productRepo.delete(repoProduct.getProductID());
             }
         }
-        ord.customer.setBalance(order.customer.getBalance() - order.getTotalPrice());
+        customer.setBalance(customer.getBalance() - order.getTotalPrice());
         ord.setStatus(OrderStatus.PLACED);
     }
 }

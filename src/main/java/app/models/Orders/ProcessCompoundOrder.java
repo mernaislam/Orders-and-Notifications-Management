@@ -1,5 +1,6 @@
 package app.models.Orders;
 
+import app.models.Customer.Customer;
 import app.models.Product.Product;
 import app.repos.ProductRepo;
 import app.service.OrderService;
@@ -63,8 +64,9 @@ public class ProcessCompoundOrder extends ProcessOrder {
         order.setStatus(OrderStatus.INVALID);
 
         for (SimpleOrder o : order.getOrders()) {
-            if (!orderService.userExists(o.getCustomer().getCustomerID())
-                    || !orderService.hasMoney(o.getCustomer(), o.getTotalPrice())) {
+            Customer customer = orderService.getCustomer(ord.getCustomerUsername());
+            if (customer == null
+                    || !orderService.hasMoney(customer, o.getTotalPrice())) {
                 return;
             }
             for (Product p : o.getProducts()) {
@@ -90,7 +92,8 @@ public class ProcessCompoundOrder extends ProcessOrder {
         }
         // update customer balance
         for (SimpleOrder o : order.getOrders()) {
-            o.customer.setBalance(o.customer.getBalance() - o.getTotalPrice());
+            Customer customer = orderService.getCustomer(ord.getCustomerUsername());
+            customer.setBalance(customer.getBalance() - o.getTotalPrice());
         }
         // update order status
         order.setStatus(OrderStatus.PLACED);

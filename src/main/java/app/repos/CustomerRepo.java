@@ -54,6 +54,14 @@ public class CustomerRepo implements Repository<Customer> {
         return null;
     }
 
+    public Customer findByUsername(String username){
+        for (Customer customer : customers) {
+            if (customer.getUsername().equals(username))
+                return customer;
+        }
+        return null;
+    }
+
     @Override
     public ArrayList<Customer> getAll() {
         return customers;

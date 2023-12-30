@@ -96,5 +96,8 @@ public class OrderService {
         }
         return value;
     }
+    public Customer getCustomer(String customerUsername){
+        return customerRepo.findByUsername(customerUsername);
+    }
 
 }

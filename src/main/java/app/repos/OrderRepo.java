@@ -66,19 +66,19 @@ public class OrderRepo implements Repository<Order> {
         ArrayList<Product> orderItems = new ArrayList<>();
 
         orderItems.add(new Product());
-        Order simpleOrder1 = new SimpleOrder(new Customer(),  orderItems);
+        Order simpleOrder1 = new SimpleOrder("",  orderItems);
         orders.add(simpleOrder1);
         // order2
         orderItems = new ArrayList<>();
         orderItems.add(new Product());
         orderItems.add(new Product());
-        Order simpleOrder2 = new SimpleOrder(new Customer(),  orderItems);
+        Order simpleOrder2 = new SimpleOrder("",  orderItems);
         orders.add(simpleOrder2);
         // order3
         orderItems = new ArrayList<>();
         orderItems.add(new Product());
         orderItems.add(new Product());
-        Order simpleOrder3 = new SimpleOrder(new Customer(),  orderItems);
+        Order simpleOrder3 = new SimpleOrder("",  orderItems);
         orders.add(simpleOrder3);
 
     }

@@ -19,7 +19,7 @@ public class OrderPlacementNotification extends NotificationTemplate {
     @Override
     public void addPlaceholders() {
         // add the placeholders that was written in the translated generated text
-        this.placeholders.put("{customerName}", order.getCustomer().getName());
+//        this.placeholders.put("{customerName}", order.getCustomer().getName());
         this.placeholders.put("{orderID}", String.valueOf(order.getOrderID()));
     }
 }

@@ -8,24 +8,24 @@ import java.util.ArrayList;
 
 public abstract class Order {
     protected int orderID;
-    protected Customer customer;
+    protected String customerUsername;
     protected Double productsFees; // to be calculated when the order is placed
     protected Double shippingFees; // to be calculated when the order is shipped
     protected Double totalPrice; // to be calculated when the order is placed and shipped
     protected LocalDate orderDate;
     protected OrderStatus status;
 
-    public Order(Customer customer){
+    public Order(String customerUsername){
         // id generated randomly
-        this.customer = customer;
+        this.customerUsername = customerUsername;
         this.productsFees = 0.0;
         this.shippingFees = 0.0;
         this.totalPrice = 0.0;
         this.orderDate = LocalDate.now();
         this.status = OrderStatus.PENDING;
     }
-    public Customer getCustomer() {
-        return customer;
+    public String getCustomer() {
+        return customerUsername;
     }
 
     public int getOrderID() {
@@ -72,4 +72,7 @@ public abstract class Order {
         this.status = status;
     }
 
+    public String getCustomerUsername() {
+        return customerUsername;
+    }
 }

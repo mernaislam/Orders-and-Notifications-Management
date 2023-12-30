@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class SimpleOrder extends Order{
     private ArrayList<Product> products = new ArrayList<>();
 
-    public SimpleOrder(Customer customer, ArrayList<Product> products) {
-        super(customer);
+    public SimpleOrder(String customerUsername, ArrayList<Product> products) {
+        super(customerUsername);
         this.products = products;
     }
     public ArrayList<Product> getProducts() {
