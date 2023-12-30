@@ -49,7 +49,7 @@ public class OrderController {
     // Delete an existing order
     @DeleteMapping (path="/order/{id}")
     public void deleteOrder(@PathVariable(name = "id") int id) { // works
-//        orderService.cancelOrder(id);
+        orderService.cancelPlacement(id);
     }
 
     // Returns order by id

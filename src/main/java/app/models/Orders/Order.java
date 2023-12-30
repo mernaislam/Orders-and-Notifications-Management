@@ -1,10 +1,6 @@
 package app.models.Orders;
 
-import app.models.Customer.Customer;
-import app.models.Product.Product;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public abstract class Order {
     protected int orderID;
@@ -14,6 +10,7 @@ public abstract class Order {
     protected Double totalPrice; // to be calculated when the order is placed and shipped
     protected LocalDate orderDate;
     protected OrderStatus status;
+    protected boolean preconfiguredTimeFinished;
 
     public Order(String customerUsername){
         // id generated randomly
@@ -23,6 +20,7 @@ public abstract class Order {
         this.totalPrice = 0.0;
         this.orderDate = LocalDate.now();
         this.status = OrderStatus.PENDING;
+        this.preconfiguredTimeFinished = false;
     }
     public String getCustomer() {
         return customerUsername;
@@ -74,5 +72,13 @@ public abstract class Order {
 
     public String getCustomerUsername() {
         return customerUsername;
+    }
+
+    public boolean isPreconfiguredTimeFinished() {
+        return preconfiguredTimeFinished;
+    }
+
+    public void setPreconfiguredTimeFinished(boolean preconfiguredTimeFinished) {
+        this.preconfiguredTimeFinished = preconfiguredTimeFinished;
     }
 }

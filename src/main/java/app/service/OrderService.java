@@ -18,6 +18,7 @@ public class OrderService {
     private final NotificationTemplateService notificationService;
     private final CustomerRepo customerRepo;
     private final ProductRepo productRepo;
+    private final int PRECONFIGURED_TIME = 120; // Default value is 120 seconds - 2 minutes
 
     @Autowired
     public OrderService(OrderRepo orderRepo, NotificationTemplateService notificationService, CustomerRepo customerRepo, ProductRepo productRepo) {
@@ -43,7 +44,6 @@ public class OrderService {
         }
         notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
-        orderRepo.updateStatus(OrderStatus.PLACED, order.getOrderID());
     }
     public void addCompoundOrder(CompoundOrder order) {
         ProcessOrder orderProcessor = new ProcessCompoundOrder(this, productRepo);
@@ -53,30 +53,46 @@ public class OrderService {
         }
         notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
-        orderRepo.updateStatus(OrderStatus.PLACED, order.getOrderID());
     }
 
     public void shipOrder(int id) {
         // create el notification subject shipOrder
         Order order = orderRepo.findByID(id);
-        if (order == null)
+        // check if order is placed before shipping
+        if(!(order.getStatus() == OrderStatus.PLACED))
             return;
         notificationService.generateNotification(NotificationSubject.ORDER_SHIPMENT, order);
         orderRepo.updateStatus(OrderStatus.SHIPPED, id);
+        // once the order is shipped, start a timer for preconfigured time
+        new Thread(new Runnable() {
+            // run in new thread so the request thread doesn't wait for preconfigured time and stops
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(PRECONFIGURED_TIME * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                order.setPreconfiguredTimeFinished(true);
+            }
+        }).start();
     }
     public void cancelPlacement(int id) {
         Order order = orderRepo.findByID(id);
-        if (order == null) {
+        if(!(order.getStatus() == OrderStatus.PLACED))
             return;
-        }
         notificationService.generateNotification(NotificationSubject.PLACEMENT_CANCELLATION, order);
         orderRepo.delete(id);
     }
     public void cancelShipment(int id) {
-        // create el notification subject cancelShipment law hn3ml
-
-        //condition 2n fe configuered time m3dash men sa3t ma el order et3mlo ship
-        orderRepo.updateStatus(OrderStatus.PLACED, id);
+        Order order = orderRepo.findByID(id);
+        if(!(order.getStatus() == OrderStatus.SHIPPED))
+            return;
+        // cancel only if preconfigured time isn't finished yet
+       if(!order.isPreconfiguredTimeFinished()) {
+           notificationService.generateNotification(NotificationSubject.SHIPMENT_CANCELLATION, order);
+           orderRepo.updateStatus(OrderStatus.PLACED, id);
+       }
     }
     public boolean orderExists(int id) {
         return orderRepo.findByID(id) != null;
