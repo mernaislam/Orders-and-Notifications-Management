@@ -13,8 +13,9 @@ import java.util.Random;
 public class CustomerService {
     private final CustomerRepo customerRepo;
 
-    public CustomerService() {
-        this.customerRepo = new CustomerRepo();
+    @Autowired
+    public CustomerService(CustomerRepo customerRepo) {
+        this.customerRepo = customerRepo;
     }
 
     public Customer findCustomerById(int id) {

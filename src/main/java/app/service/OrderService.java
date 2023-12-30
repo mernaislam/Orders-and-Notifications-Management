@@ -3,6 +3,7 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationSubject;
 import app.models.Orders.*;
+import app.models.Product.Product;
 import app.repos.CustomerRepo;
 import app.repos.OrderRepo;
 import app.repos.ProductRepo;
@@ -21,11 +22,11 @@ public class OrderService {
     private final int PRECONFIGURED_TIME = 120; // Default value is 120 seconds - 2 minutes
 
     @Autowired
-    public OrderService() {
-        this.orderRepo = new OrderRepo();
-        this.notificationService = new NotificationTemplateService();
-        this.customerRepo = new CustomerRepo();
-        this.productRepo = new ProductRepo();
+    public OrderService(OrderRepo orderRepo, NotificationTemplateService notificationService, CustomerRepo customerRepo, ProductRepo productRepo) {
+        this.orderRepo = orderRepo;
+        this.notificationService = notificationService;
+        this.customerRepo = customerRepo;
+        this.productRepo = productRepo;
     }
 
     public Order findOrderById(int id) {
@@ -113,7 +114,6 @@ public class OrderService {
         return value;
     }
     public Customer getCustomer(String customerUsername){
-        orderRepo = new OrderRepo();
         return customerRepo.findByUsername(customerUsername);
     }
 

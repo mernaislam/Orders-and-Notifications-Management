@@ -6,6 +6,7 @@ import app.models.Notification.*;
 import app.models.Orders.Order;
 import app.repos.NotificationTemplateRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 
@@ -21,8 +22,10 @@ public class NotificationTemplateService {
     private final NotificationTemplateRepo notificationRepo;
 
     @Autowired
-    public NotificationTemplateService() {
-        this.notificationRepo = new NotificationTemplateRepo();
+    @Lazy
+    public NotificationTemplateService(OrderService orderService, NotificationTemplateRepo notificationRepo) {
+        this.orderService = orderService;
+        this.notificationRepo = notificationRepo;
     }
 
     public Queue<NotificationTemplate> getNotificationTemplates() {
@@ -30,7 +33,6 @@ public class NotificationTemplateService {
     }
 
     public void generateNotification(NotificationSubject subject, Order order){
-        orderService = new OrderService();
         Customer customer = orderService.getCustomer(order.getCustomerUsername());
         int customerID = customer.getCustomerID();
         Language language = new EnglishLanguage(); // assume english language is chosen
