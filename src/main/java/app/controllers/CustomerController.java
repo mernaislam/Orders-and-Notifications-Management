@@ -57,8 +57,4 @@ public class CustomerController {
     Customer verifyToken(@PathVariable int id) {
         return customerService.findCustomerById(id);
     }
-    @GetMapping("/customer/{id}")
-    Customer verifyToken(@PathVariable int id) {
-        return customerService.findCustomerById(id);
-    }
 }

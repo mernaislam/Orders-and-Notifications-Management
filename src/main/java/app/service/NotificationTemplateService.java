@@ -21,7 +21,6 @@ public class NotificationTemplateService {
 
     private final NotificationTemplateRepo notificationRepo;
 
-    @Lazy
     @Autowired
     @Lazy
     public NotificationTemplateService(OrderService orderService, NotificationTemplateRepo notificationRepo) {
