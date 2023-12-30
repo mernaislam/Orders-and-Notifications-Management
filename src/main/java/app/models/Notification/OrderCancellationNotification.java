@@ -13,7 +13,7 @@ public class OrderCancellationNotification extends NotificationTemplate{
     @Override
     public void generateText() {
         this.text = "Hello {customerName}! Your order number #{orderID} has been successfully cancelled. " +
-                "We hope to see you again soon :(";
+                    "A full refund will be provided for your cancelled order. \nWe hope to see you again soon :(";
     }
 
     @Override

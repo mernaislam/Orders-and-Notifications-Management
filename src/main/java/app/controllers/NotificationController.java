@@ -28,8 +28,9 @@ public class NotificationController {
     public String getTemplateStatistics() {
         return templateService.getTemplateStatistics();
     }
-    @GetMapping (path="/getStatistics")
+    // return channel statistics
+    @GetMapping (path="/getChannelStatistics")
     public String getStatistics() {
-        return templateService.getStatistics();
+        return templateService.getChannelStatistics();
     }
 }

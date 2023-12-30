@@ -44,12 +44,19 @@ public class OrderService {
 
     public void deleteOrder(int id) {
         // check if order exists
+        Order order = orderRepo.findByID(id);
+        if (order == null)
+            return;
+        notificationService.generateNotification(NotificationSubject.ORDER_CANCELLATION, order);
         orderRepo.delete(id);
-        // order cancelled notification
     }
 
     public void shipOrder(int id) {
         // create el notification subject shipOrder
+        Order order = orderRepo.findByID(id);
+        if (order == null)
+            return;
+        notificationService.generateNotification(NotificationSubject.ORDER_SHIPMENT, order);
         orderRepo.updateStatus(OrderStatus.SHIPPED, id);
     }
 }

@@ -23,7 +23,6 @@ public class NotificationTemplateService {
         this.notificationRepo = notificationRepo;
     }
 
-
     public Queue<NotificationTemplate> getNotificationTemplates() {
         return notificationRepo.getAllNotifications();
     }
@@ -36,22 +35,23 @@ public class NotificationTemplateService {
             case ORDER_PLACEMENT ->  {
                 notification = new OrderPlacementNotification(language, order);
                 channel = new Email(); // assume email channel is chosen
-                notificationRepo.updateEmailChannelCount(order.getCustomer().getEmail());
+                notificationRepo.updateChannelCount(channel); // update for statistics
             }
             case ORDER_SHIPMENT -> {
                 notification = new OrderShipmentNotification(language, order);
                 channel = new SMS(); // assume sms channel is chosen
-                notificationRepo.updateSMSChannelCount(order.getCustomer().getPhoneNumber());
+                notificationRepo.updateChannelCount(channel); // update for statistics
             }
             case ORDER_CANCELLATION -> {
                 notification = new OrderCancellationNotification(language, order);
                 channel = new Email(); // assume email channel is chosen
-                notificationRepo.updateEmailChannelCount(order.getCustomer().getEmail());
+                notificationRepo.updateChannelCount(channel); // update for statistics
             }
         };
         NotificationTemplate sendNotification = notification;
         if(notification != null) {
-        new Thread(new Runnable() {
+            notificationRepo.updateNotificationCount(notification); // update for statistics
+            new Thread(new Runnable() {
             // run in new thread so the request thread doesn't wait for the notification to be sent and stops
             @Override
             public void run() {
@@ -74,64 +74,39 @@ public class NotificationTemplateService {
         channel.sendNotification(notificationToSend, customerID);
     }
     public String getTemplateStatistics(){
-        int mx = -999999;
+        int mx = 0;
         String mostNotifiedTemplate = "";
-        NotificationTemplate mostNotified = null;
-        HashMap<NotificationTemplate, Integer> notificationCount = notificationRepo.getAllTemplateCount();
-        for (NotificationTemplate key: notificationCount.keySet()) {
+        String mostNotified = null;
+        HashMap<String, Integer> notificationCount = notificationRepo.getAllTemplateCount();
+        for (String key: notificationCount.keySet()) {
             if (notificationCount.get(key) > mx) {
                 mx = notificationCount.get(key);
                 mostNotified = key;
             }
         }
         if (mostNotified != null) {
-            mostNotifiedTemplate += "Most Notified Notification Template: " + mostNotified.getText();
+            mostNotifiedTemplate += "Most Notified Notification Template: " + mostNotified;
             mostNotifiedTemplate += "\nNumber of times notified: " + mx;
         }
         return mostNotifiedTemplate;
     }
 
-    public String getEmailChannelStatistics(){
-        int mx = -999999;
-        String mostNotifiedEmail = "";
+    public String getChannelStatistics(){
+        int mx = 0;
+        String mostNotifiedChannel = "";
         String mostNotified = "";
-        HashMap<String, Integer> emailCount = notificationRepo.getEmailChannelCount();
-        for (String key: emailCount.keySet()) {
-            if (emailCount.get(key) > mx) {
-                mx = emailCount.get(key);
+        HashMap<String, Integer> channelCount = notificationRepo.getAllChannelCount();
+        for (String key: channelCount.keySet()) {
+            if (channelCount.get(key) > mx) {
+                mx = channelCount.get(key);
                 mostNotified = key;
             }
         }
         if (mostNotified != null) {
-            mostNotifiedEmail += "Most Notified Email Notification: " + mostNotified;
-            mostNotifiedEmail += "\nNumber of times notified: " + mx;
+            mostNotifiedChannel += "Most Notified Notification Channel: " + mostNotified;
+            mostNotifiedChannel += "\nNumber of times notified: " + mx;
         }
-        return mostNotifiedEmail;
-    }
-
-    public String getSMSChannelStatistics(){
-        int mx = -999999;
-        String mostNotifiedSMS = "";
-        String mostNotified = "";
-        HashMap<String, Integer> SMSCount = notificationRepo.getSMSChannelCount();
-        for (String key: SMSCount.keySet()) {
-            if (SMSCount.get(key) > mx) {
-                mx = SMSCount.get(key);
-                mostNotified = key;
-            }
-        }
-        if (mostNotified != null) {
-            mostNotifiedSMS += "Most Notified SMS Notification: " + mostNotified;
-            mostNotifiedSMS += "\nNumber of times notified: " + mx;
-        }
-        return mostNotifiedSMS;
-    }
-    public String getStatistics(){
-        String statistics = "";
-        statistics += getEmailChannelStatistics();
-        statistics += "\n\n";
-        statistics += getSMSChannelStatistics();
-        return statistics;
+        return mostNotifiedChannel;
     }
 
 }

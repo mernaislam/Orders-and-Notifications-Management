@@ -12,7 +12,8 @@ public class OrderPlacementNotification extends NotificationTemplate {
 
     @Override
     public void generateText() {
-        this.text = "Hello {customerName}! Your order number #{orderID} has been successfully placed. Thanks for using our store :)";
+        this.text = "Hello {customerName}! Your order number #{orderID} has been successfully placed. " +
+                    "Thanks for using our store :)";
     }
 
     @Override
