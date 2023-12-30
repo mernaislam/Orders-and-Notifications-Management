@@ -10,6 +10,7 @@ public class Product {
     private String vendor;
     private Category category;
     private double price;
+    private int quantity;
 
     public Product(){
         // generate random product
@@ -19,15 +20,18 @@ public class Product {
         this.vendor = "Vendor";
         this.category = Category.getRandom();
         this.price = new Random().nextDouble() * (100.0 - 5.0) + 5.0;
+        this.quantity = (int) (new Random().nextDouble() * (100.0 - 5.0) + 5.0);
     }
 
-    public Product(String name, String vendor, Category category, double price) {
+    public Product(int id, String name, String vendor, Category category, double price, int quantity) {
         // id should be generated automatically
+        this.productID = id;
         this.serialNumber = "Serial Number";
         this.name = name;
         this.vendor = vendor;
         this.category = category;
         this.price = price;
+        this.quantity = quantity;
     }
 
     public int getProductID() {
@@ -54,4 +58,14 @@ public class Product {
         return price;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setProductID(int productID) {
+        this.productID = productID;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
