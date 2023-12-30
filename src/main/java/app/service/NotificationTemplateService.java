@@ -94,7 +94,7 @@ public class NotificationTemplateService {
     public String getChannelStatistics(){
         int mx = 0;
         String mostNotifiedChannel = "";
-        String mostNotified = "";
+        String mostNotified = null;
         HashMap<String, Integer> channelCount = notificationRepo.getAllChannelCount();
         for (String key: channelCount.keySet()) {
             if (channelCount.get(key) > mx) {
