@@ -9,6 +9,7 @@ import app.security.JwtTokenUtil;
 import app.security.ResponseEntityStructure;
 import app.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,14 +31,18 @@ public class OrderController {
     // Add a new simpleOrder to OrderRepo
     @PostMapping (path="/placeOrder/simpleOrder")
     public ResponseEntity<ResponseEntityStructure> addSimpleOrder(@RequestBody SimpleOrder order, @RequestHeader("Authorization") String token) throws GlobalException { // works
-        GlobalException globalException;
+        GlobalException exception;
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
             orderService.addSimpleOrder(order);
-            if(order.getStatus() == OrderStatus.INVALID){
-                return null;
+            if(order.getStatus() == OrderStatus.PLACED){
+                exception = new GlobalException("Order placed Successfully", HttpStatus.OK);
+            } else {
+                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities]", HttpStatus.BAD_REQUEST);
             }
+        } else {
+            exception = new GlobalException("No such username exists, try again", HttpStatus.BAD_REQUEST);
         }
-        return null;
+        return exceptionController.GlobalException(exception);
     }
 
     // Add a new CompoundOrder to OrderRepo

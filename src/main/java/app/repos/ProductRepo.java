@@ -74,10 +74,10 @@ public class ProductRepo implements Repository<Product> {
 
     @Override
     public void loadData() {
-        products.add(new Product(1,"Apple", "Vendor", Category.CATEGORY1, 10.0, 10));
-        products.add(new Product(2,"Banana", "Vendor", Category.CATEGORY1, 5.0, 10));
-        products.add(new Product(3,"Milk", "Vendor", Category.CATEGORY2, 20.0, 10));
-        products.add(new Product(4,"Cheese", "Vendor", Category.CATEGORY3, 15.0, 10));
+        products.add(new Product(1,"Apple", "Vendor1", Category.CATEGORY1, 10.0, 10));
+        products.add(new Product(2,"Banana", "Vendor2", Category.CATEGORY1, 5.0, 10));
+        products.add(new Product(3,"Milk", "Vendor3", Category.CATEGORY2, 20.0, 10));
+        products.add(new Product(4,"Cheese", "Vendor4", Category.CATEGORY3, 15.0, 10));
     }
 
 

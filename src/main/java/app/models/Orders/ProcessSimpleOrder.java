@@ -33,7 +33,8 @@ public class ProcessSimpleOrder extends ProcessOrder {
     @Override
     public void calculateShippingFees(Order order) {
         // should be calculated based on customer's city (random for now)
-        double shippingFees = new Random().nextDouble() * (100.0 - 50.0) + 50.0;
+        Random random = new Random();
+        double shippingFees = random.nextInt(50 - 11);
         order.setShippingFees(shippingFees);
 
     }
@@ -56,13 +57,19 @@ public class ProcessSimpleOrder extends ProcessOrder {
                 return;
             }
         }
+        int i = 0;
         // for loop to decrement product quantity
         for (Product p : order.getProducts()) {
             Product repoProduct = productRepo.findByID(p.getProductID());
+            int quantity = p.getQuantity();
             repoProduct.setQuantity(repoProduct.getQuantity() - p.getQuantity());
+            p = repoProduct;
+            p.setQuantity(quantity);
+            order.getProducts().set(i, p);
             if (repoProduct.getQuantity() == 0) {
                 productRepo.delete(repoProduct.getProductID());
             }
+            i++;
         }
         customer.setBalance(customer.getBalance() - order.getTotalPrice());
         ord.setStatus(OrderStatus.PLACED);

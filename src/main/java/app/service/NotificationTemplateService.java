@@ -21,8 +21,8 @@ public class NotificationTemplateService {
     private final NotificationTemplateRepo notificationRepo;
 
     @Autowired
-    public NotificationTemplateService(NotificationTemplateRepo notificationRepo) {
-        this.notificationRepo = notificationRepo;
+    public NotificationTemplateService() {
+        this.notificationRepo = new NotificationTemplateRepo();
     }
 
     public Queue<NotificationTemplate> getNotificationTemplates() {
@@ -30,6 +30,7 @@ public class NotificationTemplateService {
     }
 
     public void generateNotification(NotificationSubject subject, Order order){
+        orderService = new OrderService();
         Customer customer = orderService.getCustomer(order.getCustomerUsername());
         int customerID = customer.getCustomerID();
         Language language = new EnglishLanguage(); // assume english language is chosen
