@@ -3,18 +3,18 @@ package app.models.Notification;
 import app.models.Orders.Order;
 import app.service.OrderService;
 
-public class OrderPlacementNotification extends NotificationTemplate {
+public class ShipmentCancellationNotification extends NotificationTemplate {
     private Order order;
 
-    public OrderPlacementNotification(Language language, Order order, OrderService orderService) {
+    public ShipmentCancellationNotification(Language language, Order order, OrderService orderService) {
         super(language, orderService);
         this.order = order;
     }
 
     @Override
     public void generateText() {
-        this.text = "Hello {customerName}! Your order number #{orderID} has been successfully placed. " +
-                    "Thanks for using our store :)";
+        this.text = "Hello {customerName}! Your order shipment number #{orderID} has been successfully cancelled. " +
+                     "We hope to see you again soon :(";
     }
 
     @Override

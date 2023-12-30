@@ -17,10 +17,12 @@ public class NotificationTemplateService {
     private final int CONFIGURED_TIME = 5; // Default value is 5 seconds
 
     private final NotificationTemplateRepo notificationRepo;
+    private final OrderService orderService;
 
     @Autowired
-    public NotificationTemplateService(NotificationTemplateRepo notificationRepo) {
+    public NotificationTemplateService(NotificationTemplateRepo notificationRepo, OrderService orderService) {
         this.notificationRepo = notificationRepo;
+        this.orderService = orderService;
     }
 
     public Queue<NotificationTemplate> getNotificationTemplates() {
@@ -33,16 +35,20 @@ public class NotificationTemplateService {
         NotificationTemplate notification = null;
         switch (subject) {
             case ORDER_PLACEMENT ->  {
-                notification = new OrderPlacementNotification(language, order);
+                notification = new OrderPlacementNotification(language, order, orderService);
                 channel = new Email(); // assume email channel is chosen
             }
             case ORDER_SHIPMENT -> {
-                notification = new OrderShipmentNotification(language, order);
+                notification = new OrderShipmentNotification(language, order, orderService);
                 channel = new SMS(); // assume sms channel is chosen
             }
-            case ORDER_CANCELLATION -> {
-                notification = new OrderCancellationNotification(language, order);
+            case PLACEMENT_CANCELLATION -> {
+                notification = new PlacementCancellationNotification(language, order, orderService);
                 channel = new Email(); // assume email channel is chosen
+            }
+            case SHIPMENT_CANCELLATION -> {
+                notification = new ShipmentCancellationNotification(language, order, orderService);
+                channel = new SMS(); // assume SMS channel is chosen
             }
         };
         NotificationTemplate sendNotification = notification;

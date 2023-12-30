@@ -1,14 +1,18 @@
 package app.models.Notification;
 
+import app.service.OrderService;
+
 import java.util.HashMap;
 
 public abstract class NotificationTemplate {
     protected String text;
     protected Language language;
     protected HashMap<String, String> placeholders = new HashMap<>();
+    protected OrderService orderService;
 
-    public NotificationTemplate(Language language){
+    public NotificationTemplate(Language language, OrderService orderService){
         this.language = language;
+        this.orderService = orderService;
     }
     public final void createTemplate(){
         // Template method - Skeleton
