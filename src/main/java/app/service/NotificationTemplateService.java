@@ -35,30 +35,31 @@ public class NotificationTemplateService {
             case ORDER_PLACEMENT ->  {
                 notification = new OrderPlacementNotification(language, order);
                 channel = new Email(); // assume email channel is chosen
-                notificationRepo.updateChannelCount(channel); // update for statistics
             }
             case ORDER_SHIPMENT -> {
                 notification = new OrderShipmentNotification(language, order);
                 channel = new SMS(); // assume sms channel is chosen
-                notificationRepo.updateChannelCount(channel); // update for statistics
             }
             case ORDER_CANCELLATION -> {
                 notification = new OrderCancellationNotification(language, order);
                 channel = new Email(); // assume email channel is chosen
-                notificationRepo.updateChannelCount(channel); // update for statistics
             }
         };
         NotificationTemplate sendNotification = notification;
         if(notification != null) {
-            notificationRepo.updateNotificationCount(notification); // update for statistics
             new Thread(new Runnable() {
             // run in new thread so the request thread doesn't wait for the notification to be sent and stops
             @Override
             public void run() {
+                // add to queue, send notification, remove from queue
                 sendNotification.createTemplate();
                 notificationRepo.addNotification(sendNotification);
                 sendNotification(sendNotification, customerID);
                 notificationRepo.deleteNotification(sendNotification);
+
+                // after it was sent successfully, update live statistics
+                notificationRepo.updateNotificationCount(sendNotification);
+                notificationRepo.updateChannelCount(channel);
             }
             }).start();
         }
