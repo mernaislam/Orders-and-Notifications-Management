@@ -3,39 +3,26 @@ package app.models.Orders;
 import app.models.Customer.Customer;
 import app.models.Product.Product;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Random;
 
-@Entity
 public abstract class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int orderID;
     protected Customer customer;
     protected Double productsFees; // to be calculated when the order is placed
     protected Double shippingFees; // to be calculated when the order is shipped
     protected Double totalPrice; // to be calculated when the order is placed and shipped
     protected LocalDate orderDate;
-    protected ArrayList<Product> products = new ArrayList<>();
+    protected OrderStatus status;
 
-    public Order(){
-        // generate random order
-        this.customer = new Customer();
-        this.orderDate = LocalDate.now();
-        int numOfProducts = new Random().nextInt() * (15 - 1) + 1;
-//        for(int i = 0; i < numOfProducts; i++){
-//            this.products.add(new Product());
-//        }
-    }
-    public Order(Customer customer, ArrayList<Product> products){
+    public Order(Customer customer){
+        // id generated randomly
         this.customer = customer;
-        this.products = products;
+        this.productsFees = 0.0;
+        this.shippingFees = 0.0;
+        this.totalPrice = 0.0;
         this.orderDate = LocalDate.now();
+        this.status = OrderStatus.PENDING;
     }
     public Customer getCustomer() {
         return customer;
@@ -60,10 +47,10 @@ public abstract class Order {
     public LocalDate getOrderDate() {
         return orderDate;
     }
-
-    public ArrayList<Product> getProducts() {
-        return products;
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
     }
+
 
     public void setProductsFees(Double productsFees) {
         this.productsFees = productsFees;
@@ -73,8 +60,15 @@ public abstract class Order {
         this.shippingFees = shippingFees;
     }
 
-    public void setTotalPrice() {
-        // to be called after setting productsFees and shippingFees
-        this.totalPrice = this.productsFees + this.shippingFees;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

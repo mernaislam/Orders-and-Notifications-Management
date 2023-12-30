@@ -1,9 +1,11 @@
 package app.repos;
 
 import app.models.Customer.Customer;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+@Component
 public class CustomerRepo implements Repository<Customer> {
     private ArrayList<Customer> customers = new ArrayList<>();
 

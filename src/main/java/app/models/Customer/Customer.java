@@ -5,7 +5,6 @@ import app.service.CustomerService;
 import javax.persistence.Entity;
 import java.util.Random;
 
-@Entity
 public class Customer {
     private int customerID;
     private String name;
@@ -19,10 +18,11 @@ public class Customer {
 
     // generate random customer
     public Customer(){
+        // id should be generated automatically
         this.name = "Name";
         this.username = "Username";
         this.password = String.valueOf(new Random().nextInt() * (9999 - 1000) + 1000);
-        this.email = "Email";
+        this.email = "name@email.com";
         this.shippingAddress = "Shipping Address";
         this.city = "City";
         this.phoneNumber = "Phone Number";
@@ -89,5 +89,8 @@ public class Customer {
 
     public Double getBalance() {
         return balance;
+    }
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 }
