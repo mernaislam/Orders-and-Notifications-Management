@@ -68,6 +68,12 @@ public class OrderService {
         // create el notification subject shipOrder
         orderRepo.updateStatus(OrderStatus.SHIPPED, id);
     }
+    public void cancelShipment(int id) {
+        // create el notification subject cancelShipment law hn3ml
+
+        //condition 2n fe configuered time m3dash men sa3t ma el order et3mlo ship
+        orderRepo.updateStatus(OrderStatus.PLACED, id);
+    }
     public boolean orderExists(int id) {
         return orderRepo.findByID(id) != null;
     }

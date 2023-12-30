@@ -36,7 +36,6 @@ public class OrderController {
     // Returns order by id
     @GetMapping (path="/findOrder/{id}")
     public Order getOrderById(@PathVariable(name = "id") int id) { // works
-        //m3rfsh hena 7war <optional> da bayn
         return orderService.findOrderById(id);
     }
     // Returns list of orders
@@ -45,8 +44,15 @@ public class OrderController {
         return orderService.getOrders();
     }
     // Ships Order
-    @GetMapping (path="/shipOrder/{id}")
+    @PutMapping (path="/shipOrder/{id}")
     public void shipOrder(@PathVariable(name = "id") int id) { // works
          orderService.shipOrder(id);
     }
+
+    // Cancels Shipment
+    @PutMapping (path="/cancelShipment/{id}")
+    public void cancelShipment(@PathVariable(name = "id") int id) {
+        orderService.cancelShipment(id);
+    }
+
 }
