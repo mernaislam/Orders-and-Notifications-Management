@@ -14,8 +14,8 @@ public class CustomerService {
     private final CustomerRepo customerRepo;
 
     @Autowired
-    public CustomerService() {
-        this.customerRepo = new CustomerRepo();
+    public CustomerService(CustomerRepo customerRepo) {
+        this.customerRepo = customerRepo;
     }
 
     public Customer findCustomerById(int id) {

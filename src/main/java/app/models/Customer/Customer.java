@@ -1,5 +1,6 @@
 package app.models.Customer;
 
+import app.repos.CustomerRepo;
 import app.service.CustomerService;
 
 import javax.persistence.Entity;
@@ -24,7 +25,8 @@ public class Customer {
         this.shippingAddress = shippingAddress;
         this.phoneNumber = phoneNumber;
         this.balance = balance;
-        this.customerID = getCustomerId();
+        CustomerService customerService = new CustomerService(new CustomerRepo());
+        this.customerID = customerService.generateCustomerId();
     }
 
     public Customer(int id, String name, String username, String password, String email, Address shippingAddress,

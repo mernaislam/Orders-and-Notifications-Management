@@ -44,32 +44,36 @@ public class ProcessSimpleOrder extends ProcessOrder {
         SimpleOrder order = (SimpleOrder) ord;
         Customer customer = orderService.getCustomer(ord.getCustomerUsername());
 //         law el order rg3ly status invalid m3mlosh add
+
         ord.setStatus(OrderStatus.INVALID);
         if (orderService.orderExists(order.getOrderID())
             || customer == null
             || !orderService.hasMoney(customer, order.getTotalPrice())){
             return;
         }
+
         for (Product p : order.getProducts()) {
             Product repoProduct = productRepo.findByID(p.getProductID());
-            //  Product quantity  -  order placement product quantity
             if (repoProduct == null || repoProduct.getQuantity() - p.getQuantity() < 0) {
                 return;
             }
         }
-        int i = 0;
         // for loop to decrement product quantity
         for (Product p : order.getProducts()) {
+            // product from the database
             Product repoProduct = productRepo.findByID(p.getProductID());
+            // quantity bought by the customer
             int quantity = p.getQuantity();
-            repoProduct.setQuantity(repoProduct.getQuantity() - p.getQuantity());
-            p = repoProduct;
+            // get the product details from the database using deep copy
+            p.copy(repoProduct);
+            // set the quantity bought by the customer
             p.setQuantity(quantity);
-            order.getProducts().set(i, p);
+            // decrement the quantity in the database
+            repoProduct.setQuantity(repoProduct.getQuantity() - p.getQuantity());
+
             if (repoProduct.getQuantity() == 0) {
                 productRepo.delete(repoProduct.getProductID());
             }
-            i++;
         }
         customer.setBalance(customer.getBalance() - order.getTotalPrice());
         ord.setStatus(OrderStatus.PLACED);

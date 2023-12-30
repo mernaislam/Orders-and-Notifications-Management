@@ -14,12 +14,10 @@ import java.util.ArrayList;
 @RequestMapping(path="/api")
 public class ProductController {
     private final ProductService productService;
-
     @Autowired
-    ProductController(ProductService productService){
-        this.productService = productService;
+    public ProductController(ProductService productService) {
+        this.productService =  productService;
     }
-
     @GetMapping("/products")
     ArrayList<Product> displayProducts(){
         return productService.getProducts();

@@ -23,8 +23,10 @@ public class NotificationTemplateService {
 
     @Lazy
     @Autowired
-    public NotificationTemplateService() {
-        this.notificationRepo = new NotificationTemplateRepo();
+    @Lazy
+    public NotificationTemplateService(OrderService orderService, NotificationTemplateRepo notificationRepo) {
+        this.orderService = orderService;
+        this.notificationRepo = notificationRepo;
     }
 
     public Queue<NotificationTemplate> getNotificationTemplates() {
@@ -32,7 +34,6 @@ public class NotificationTemplateService {
     }
 
     public void generateNotification(NotificationSubject subject, Order order){
-        orderService = new OrderService();
         Customer customer = orderService.getCustomer(order.getCustomerUsername());
         int customerID = customer.getCustomerID();
         Language language = new EnglishLanguage(); // assume english language is chosen
