@@ -26,9 +26,10 @@ public class Customer {
         this.balance = new Random().nextDouble() * (10000.0 - 100.0) + 100.0;
     }
 
-    public Customer(String name, String username, String password, String email, String shippingAddress,
+    public Customer(int id,String name, String username, String password, String email, String shippingAddress,
                     String city, String phoneNumber, Double balance) {
         // id should be generated automatically
+        this.customerID = id;
         this.name = name;
         this.username = username;
         this.password = password;
@@ -72,5 +73,8 @@ public class Customer {
 
     public Double getBalance() {
         return balance;
+    }
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 }

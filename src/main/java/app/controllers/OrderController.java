@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping(path="/app/order")
+@RequestMapping(path="/api/order")
 public class OrderController {
     private final OrderService orderService;
     @Autowired
@@ -30,13 +30,12 @@ public class OrderController {
     // Delete an existing order
     @DeleteMapping (path="/deleteOrder/{id}")
     public void deleteOrder(@PathVariable(name = "id") int id) { // works
-        orderService.deleteOrder(id);
+        orderService.cancelOrder(id);
     }
 
     // Returns order by id
     @GetMapping (path="/findOrder/{id}")
     public Order getOrderById(@PathVariable(name = "id") int id) { // works
-        //m3rfsh hena 7war <optional> da bayn
         return orderService.findOrderById(id);
     }
     // Returns list of orders
@@ -45,8 +44,15 @@ public class OrderController {
         return orderService.getOrders();
     }
     // Ships Order
-    @GetMapping (path="/shipOrder/{id}")
+    @PutMapping (path="/shipOrder/{id}")
     public void shipOrder(@PathVariable(name = "id") int id) { // works
          orderService.shipOrder(id);
     }
+
+    // Cancels Shipment
+    @PutMapping (path="/cancelShipment/{id}")
+    public void cancelShipment(@PathVariable(name = "id") int id) {
+        orderService.cancelShipment(id);
+    }
+
 }

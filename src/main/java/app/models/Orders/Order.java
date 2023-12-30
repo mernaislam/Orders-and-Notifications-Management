@@ -13,13 +13,14 @@ public abstract class Order {
     protected Double shippingFees; // to be calculated when the order is shipped
     protected Double totalPrice; // to be calculated when the order is placed and shipped
     protected LocalDate orderDate;
-    protected ArrayList<Product> products = new ArrayList<>();
     protected OrderStatus status;
 
-    public Order(Customer customer, ArrayList<Product> products){
-        // id should be generated automatically
+    public Order(Customer customer){
+        // id generated randomly
         this.customer = customer;
-        this.products = products;
+        this.productsFees = 0.0;
+        this.shippingFees = 0.0;
+        this.totalPrice = 0.0;
         this.orderDate = LocalDate.now();
         this.status = OrderStatus.PENDING;
     }
@@ -46,10 +47,10 @@ public abstract class Order {
     public LocalDate getOrderDate() {
         return orderDate;
     }
-
-    public ArrayList<Product> getProducts() {
-        return products;
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
     }
+
 
     public void setProductsFees(Double productsFees) {
         this.productsFees = productsFees;

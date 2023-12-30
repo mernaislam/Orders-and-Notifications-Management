@@ -3,13 +3,14 @@ package app.models.Orders;
 import app.models.Customer.Customer;
 import app.models.Product.Product;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CompoundOrder extends Order{
     private ArrayList<SimpleOrder> orders = new ArrayList<>();
 
-    public CompoundOrder(Customer customer, ArrayList<Product> products, ArrayList<SimpleOrder> orders) {
-        super(customer, products);
+    public CompoundOrder(Customer customer, ArrayList<SimpleOrder> orders) {
+        super(customer);
         this.orders = orders;
     }
 
