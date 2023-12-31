@@ -95,7 +95,8 @@ public class ProcessCompoundOrder extends ProcessOrder {
             Product repoProduct = productRepo.findByID(pID);
             repoProduct.setQuantity(repoProduct.getQuantity() - boughtProducts.get(pID));
             if (repoProduct.getQuantity() == 0) {
-                productRepo.delete(repoProduct.getProductID());
+                productRepo.getCategoryCount().put(repoProduct.getCategory(),
+                        productRepo.getCategoryCount().get(repoProduct.getCategory()) - 1);
             }
         }
         // update customer balance
