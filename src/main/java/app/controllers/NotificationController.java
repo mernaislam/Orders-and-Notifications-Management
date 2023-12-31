@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Queue;
 
 @RestController
-@RequestMapping(path="/app/notifications")
+@RequestMapping(path="/api")
 public class NotificationController {
-
     private final NotificationTemplateService templateService;
     @Autowired
     public NotificationController(NotificationTemplateService templateService) {
@@ -23,14 +22,5 @@ public class NotificationController {
     public Queue<NotificationTemplate> getNotifications() {
         return templateService.getNotificationTemplates();
     }
-    // return  most notified template - statistics
-    @GetMapping (path="/getTemplateStatistics")
-    public String getTemplateStatistics() {
-        return templateService.getTemplateStatistics();
-    }
-    // return most notified channel - statistics
-    @GetMapping (path="/getChannelStatistics")
-    public String getChannelStatistics() {
-        return templateService.getChannelStatistics();
-    }
+
 }
