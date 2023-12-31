@@ -24,8 +24,11 @@ public class ProcessSimpleOrder extends ProcessOrder {
     public void calculateProductFees(Order order) {
         SimpleOrder simpleOrder = (SimpleOrder) order;
         double productsFees = 0;
-        for (Product product : simpleOrder.getProducts()) {
-            productsFees += product.getPrice() * product.getQuantity();
+        for (Product p : simpleOrder.getProducts()) {
+            Product repoProduct = productRepo.findByID(p.getProductID());
+            if (repoProduct == null)
+                continue;
+            productsFees += repoProduct.getPrice() * p.getQuantity();
         }
         order.setProductsFees(productsFees);
     }
@@ -75,7 +78,7 @@ public class ProcessSimpleOrder extends ProcessOrder {
                 productRepo.delete(repoProduct.getProductID());
             }
         }
-        customer.setBalance(customer.getBalance() - order.getTotalPrice());
+        customer.setBalance(customer.getBalance() - order.getProductsFees());
         ord.setStatus(OrderStatus.PLACED);
     }
 }

@@ -7,6 +7,7 @@ import app.service.OrderService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class ProcessCompoundOrder extends ProcessOrder {
@@ -31,8 +32,11 @@ public class ProcessCompoundOrder extends ProcessOrder {
         double totalProductsFees = 0;
         for (SimpleOrder o : compoundOrder.getOrders()) {
             double productsFees = 0;
-            for (Product product : o.getProducts()) {
-                productsFees += product.getPrice() * product.getQuantity();
+            for (Product p : o.getProducts()) {
+                Product repoProduct = productRepo.findByID(p.getProductID());
+                if (repoProduct == null)
+                    continue;
+                productsFees += repoProduct.getPrice() * p.getQuantity();
             }
             o.setProductsFees(productsFees);
             totalProductsFees += productsFees;
@@ -63,11 +67,14 @@ public class ProcessCompoundOrder extends ProcessOrder {
 
         // if order's status is returned as invalid, don't add it
         order.setStatus(OrderStatus.INVALID);
-
+        String city = null;
         for (SimpleOrder o : order.getOrders()) {
             Customer customer = orderService.getCustomer(o.getCustomerUsername());
-            if (customer == null
-                    || !orderService.hasMoney(customer, o.getTotalPrice())) {
+            if (city == null)
+                city = customer.getShippingAddress().getCity();
+            if (customer == null || !Objects.equals(city, customer.getShippingAddress().getCity())
+                || !orderService.hasMoney(customer, o.getTotalPrice())) {
+
                 return;
             }
             for (Product p : o.getProducts()) {
