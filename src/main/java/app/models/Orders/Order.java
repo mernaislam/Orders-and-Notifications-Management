@@ -24,7 +24,6 @@ public abstract class Order {
         this.status = OrderStatus.PENDING;
         this.preconfiguredTimeFinished = false;
     }
-
     public int getOrderID() {
         return orderID;
     }

@@ -3,17 +3,24 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationChannel;
 import app.models.Notification.NotificationTemplate;
+import app.repos.StatisticsRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
 @Service
 public class StatisticsService {
-    private HashMap<String, Integer> notificationTemplateCount = new HashMap<>();
-    private HashMap<String, Integer> channelCount = new HashMap<>();
-    private HashMap<Customer, Integer> customerNotificationCount = new HashMap<>();
+
+    private final StatisticsRepo statisticsRepo;
+
+    @Autowired
+    public StatisticsService(StatisticsRepo statisticsRepo) {
+        this.statisticsRepo = statisticsRepo;
+    }
 
     public void updateNotificationCount(NotificationTemplate notification){
+        HashMap<String, Integer> notificationTemplateCount = statisticsRepo.getNotificationTemplateCount();
         String notificationTemplateName = notification.getClass().getSimpleName();
         if (notificationTemplateCount.containsKey(notificationTemplateName)){
             notificationTemplateCount.put(notificationTemplateName, notificationTemplateCount.get(notificationTemplateName) + 1);
@@ -23,6 +30,7 @@ public class StatisticsService {
         }
     }
     public void updateChannelCount(NotificationChannel channel){
+        HashMap<String, Integer> channelCount = statisticsRepo.getChannelCount();
         String channelName = channel.getClass().getSimpleName();
         if (channelCount.containsKey(channelName)){
             channelCount.put(channelName, channelCount.get(channelName) + 1);
@@ -32,6 +40,7 @@ public class StatisticsService {
         }
     }
     public void updateCustomerNotificationCount(Customer customer){
+        HashMap<Customer, Integer> customerNotificationCount = statisticsRepo.getCustomerNotificationCount();
         if (customerNotificationCount.containsKey(customer)){
             customerNotificationCount.put(customer, customerNotificationCount.get(customer) + 1);
         }
@@ -40,6 +49,7 @@ public class StatisticsService {
         }
     }
     public String getTemplateStatistics(){
+        HashMap<String, Integer> notificationTemplateCount = statisticsRepo.getNotificationTemplateCount();
         int mx = 0;
         String mostNotifiedTemplate = "";
         String mostNotified = null;
@@ -57,6 +67,7 @@ public class StatisticsService {
     }
 
     public String getChannelStatistics(){
+        HashMap<String, Integer> channelCount = statisticsRepo.getChannelCount();
         int mx = 0;
         String mostNotifiedChannel = "";
         String mostNotified = null;
@@ -73,6 +84,7 @@ public class StatisticsService {
         return mostNotifiedChannel;
     }
     public String getCustomerStatistics(){
+        HashMap<Customer, Integer> customerNotificationCount = statisticsRepo.getCustomerNotificationCount();
         int mx = 0;
         String mostNotifiedCustomer = "";
         Customer mostNotified = null;
