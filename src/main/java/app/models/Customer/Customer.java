@@ -15,6 +15,9 @@ public class Customer {
     private Address shippingAddress;
     private String phoneNumber;
     private Double balance;
+    public Customer(){
+
+    }
 
     public Customer(String name, String username, String password, String email, Address shippingAddress,
                     String phoneNumber, Double balance) {
