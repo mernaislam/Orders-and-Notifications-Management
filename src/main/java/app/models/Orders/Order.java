@@ -24,10 +24,6 @@ public abstract class Order {
         this.status = OrderStatus.PENDING;
         this.preconfiguredTimeFinished = false;
     }
-    public String getCustomer() {
-        return customerUsername;
-    }
-
     public int getOrderID() {
         return orderID;
     }
