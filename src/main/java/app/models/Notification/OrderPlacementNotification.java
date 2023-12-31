@@ -22,6 +22,7 @@ public class OrderPlacementNotification extends NotificationTemplate {
     public void addPlaceholders() {
         Customer customer = orderService.getCustomer(order.getCustomerUsername());
         // add the placeholders that was written in the translated generated text
+        if(customer == null) System.out.println("ayhagaaaa");
         this.placeholders.put("{customerName}", customer.getName());
         this.placeholders.put("{orderID}", String.valueOf(order.getOrderID()));
     }
