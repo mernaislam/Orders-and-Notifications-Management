@@ -99,10 +99,7 @@ public class ProcessCompoundOrder extends ProcessOrder {
             }
         }
         // update customer balance
-        for (SimpleOrder o : order.getOrders()) {
-            Customer customer = orderService.getCustomer(o.getCustomerUsername());
-            customer.setBalance(customer.getBalance() - o.getTotalPrice());
-        }
+        order.deductProductsFees(orderService);
         // update order status
         order.setStatus(OrderStatus.PLACED);
     }

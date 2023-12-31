@@ -3,6 +3,7 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationSubject;
 import app.models.Orders.*;
+import app.models.Product.Product;
 import app.repos.CustomerRepo;
 import app.repos.OrderRepo;
 import app.repos.ProductRepo;
@@ -67,6 +68,7 @@ public class OrderService {
             return false;
         notificationService.generateNotification(NotificationSubject.ORDER_SHIPMENT, order);
         orderRepo.updateStatus(OrderStatus.SHIPPED, id);
+        order.deductShipmentFees(OrderService.this);
         // once the order is shipped, start a timer for preconfigured time
         new Thread(new Runnable() {
             // run in new thread so the request thread doesn't wait for preconfigured time and stops
@@ -88,6 +90,9 @@ public class OrderService {
         if(!(order.getStatus() == OrderStatus.PLACED))
             return false;
         notificationService.generateNotification(NotificationSubject.PLACEMENT_CANCELLATION, order);
+
+        order.refund(this);
+
         orderRepo.delete(id);
         return true;
     }
@@ -124,6 +129,9 @@ public class OrderService {
     }
     public Customer getCustomer(String customerUsername){
         return customerRepo.findByUsername(customerUsername);
+    }
+    public ProductRepo getProductRepo() {
+        return productRepo;
     }
 
 }

@@ -78,7 +78,7 @@ public class ProcessSimpleOrder extends ProcessOrder {
                 productRepo.delete(repoProduct.getProductID());
             }
         }
-        customer.setBalance(customer.getBalance() - order.getProductsFees());
+        order.deductProductsFees(orderService);
         ord.setStatus(OrderStatus.PLACED);
     }
 }
