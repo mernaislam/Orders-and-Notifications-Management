@@ -70,7 +70,7 @@ public class ProcessCompoundOrder extends ProcessOrder {
         String city = null;
         for (SimpleOrder o : order.getOrders()) {
             Customer customer = orderService.getCustomer(o.getCustomerUsername());
-            if (city == null)
+            if (city == null && customer != null)
                 city = customer.getShippingAddress().getCity();
             if (customer == null || !Objects.equals(city, customer.getShippingAddress().getCity())
                 || !orderService.hasMoney(customer, o.getTotalPrice())) {
