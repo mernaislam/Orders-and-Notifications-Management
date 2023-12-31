@@ -1,9 +1,6 @@
 package app.controllers;
 
-import app.models.Orders.CompoundOrder;
-import app.models.Orders.Order;
-import app.models.Orders.OrderStatus;
-import app.models.Orders.SimpleOrder;
+import app.models.Orders.*;
 import app.security.GlobalException;
 import app.security.JwtTokenUtil;
 import app.security.ResponseEntityStructure;
@@ -33,7 +30,8 @@ public class OrderController {
     public ResponseEntity<ResponseEntityStructure> addSimpleOrder(@RequestBody SimpleOrder order, @RequestHeader("Authorization") String token) {
         GlobalException exception;
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
-            orderService.addSimpleOrder(order);
+            // notification will be sent
+            orderService.addSimpleOrder(order, true);
             if(order.getStatus() == OrderStatus.PLACED){
                 exception = new GlobalException("Order placed Successfully!", HttpStatus.OK);
             } else {
@@ -45,22 +43,38 @@ public class OrderController {
         return exceptionController.GlobalException(exception);
     }
 
-    // Add a new CompoundOrder to OrderRepo
     @PostMapping (path="/placeOrder/compoundOrder")
-    public ResponseEntity<ResponseEntityStructure> addCompoundOrder(@RequestBody CompoundOrder order, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<ResponseEntityStructure> addCompoundOrder(@RequestBody OrderHelper order, @RequestHeader("Authorization") String token) {
         GlobalException exception;
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
-            orderService.addCompoundOrder(order);
-            if(order.getStatus() == OrderStatus.PLACED){
-                exception = new GlobalException("Order placed Successfully!", HttpStatus.OK);
+            // place a simple order for the current user
+            SimpleOrder simpleOrder = new SimpleOrder(order.getCustomerUsername(), order.getProducts());
+            // no notification will be sent
+            orderService.addSimpleOrder(simpleOrder, false);
+            if(simpleOrder.getStatus() == OrderStatus.PLACED){
+                // add the simple order to the orders list in OrderHelper
+                order.addOrder(simpleOrder);
+                // validate that the order ids exists
+                if(orderService.validateOrders(order.getOrders())) {
+                    CompoundOrder compoundOrder = new CompoundOrder(order.getCustomerUsername(), order.getOrders());
+                    orderService.addCompoundOrder(compoundOrder);
+                    if (compoundOrder.getStatus() == OrderStatus.PLACED) {
+                        exception = new GlobalException("Order placed Successfully!", HttpStatus.OK);
+                    } else {
+                        exception = new GlobalException("Order cannot be placed [ex: different cities], try again", HttpStatus.BAD_REQUEST);
+                    }
+                } else {
+                    exception = new GlobalException("Order ids are invalid, try again", HttpStatus.BAD_REQUEST);
+                }
             } else {
-                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities or different cities]", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities]", HttpStatus.BAD_REQUEST);
             }
         } else {
             exception = new GlobalException("No such username exists, try again!", HttpStatus.BAD_REQUEST);
         }
         return exceptionController.GlobalException(exception);
     }
+
 
     // Cancels Placement and then deletes order
     @DeleteMapping (path="/cancelPlacement/{id}")

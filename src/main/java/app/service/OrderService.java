@@ -3,6 +3,7 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationSubject;
 import app.models.Orders.*;
+import app.models.Product.Product;
 import app.repos.CustomerRepo;
 import app.repos.OrderRepo;
 import app.repos.ProductRepo;
@@ -38,13 +39,13 @@ public class OrderService {
         return orderRepo.getAll();
     }
 
-    public boolean addSimpleOrder(SimpleOrder order) {
+    public boolean addSimpleOrder(SimpleOrder order, boolean notification) {
         ProcessOrder orderProcessor = new ProcessSimpleOrder(this, productRepo);
         orderProcessor.processOrder(order);
         if (order.getStatus() == OrderStatus.INVALID) {
             return false;
         }
-        notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
+        if(notification) notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
         return true;
     }
@@ -80,7 +81,7 @@ public class OrderService {
                 }
                 // condition to check if the order wasn't cancelled in another thread and still shipped
                 if(order.getStatus() == OrderStatus.SHIPPED) {
-                    order.setPreconfiguredTimeFinished(true);
+                    order.setPreConfiguredTime(true);
                 }
             }
         }).start();
@@ -135,5 +136,16 @@ public class OrderService {
     public ProductRepo getProductRepo() {
         return productRepo;
     }
-
+    public boolean validateOrders(ArrayList<SimpleOrder> orders) {
+        int i = 0;
+        for (SimpleOrder order: orders) {
+            SimpleOrder o = (SimpleOrder) orderRepo.findByID(order.getOrderID());
+            if(o == null){
+                return false;
+            }
+            orders.set(i, o);
+            i++;
+        }
+        return true;
+    }
 }
