@@ -3,7 +3,6 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationSubject;
 import app.models.Orders.*;
-import app.models.Product.Product;
 import app.repos.CustomerRepo;
 import app.repos.OrderRepo;
 import app.repos.ProductRepo;
@@ -79,7 +78,10 @@ public class OrderService {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                order.setPreconfiguredTimeFinished(true);
+                // condition to check if the order wasn't cancelled in another thread and still shipped
+                if(order.getStatus() == OrderStatus.SHIPPED) {
+                    order.setPreconfiguredTimeFinished(true);
+                }
             }
         }).start();
         return true;

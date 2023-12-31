@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-
-import java.util.HashMap;
 import java.util.Queue;
 
 @Service
@@ -18,14 +16,15 @@ public class NotificationTemplateService {
     private NotificationChannel channel;
     private OrderService orderService;
     private final int CONFIGURED_TIME = 30; // Default value is 30 seconds
-
     private final NotificationTemplateRepo notificationRepo;
+    private final StatisticsService statisticsService;
 
     @Autowired
     @Lazy
-    public NotificationTemplateService(OrderService orderService, NotificationTemplateRepo notificationRepo) {
+    public NotificationTemplateService(OrderService orderService, NotificationTemplateRepo notificationRepo, StatisticsService statisticsService) {
         this.orderService = orderService;
         this.notificationRepo = notificationRepo;
+        this.statisticsService = statisticsService;
     }
 
     public Queue<NotificationTemplate> getNotificationTemplates() {
@@ -68,8 +67,9 @@ public class NotificationTemplateService {
                 notificationRepo.deleteNotification(sendNotification);
 
                 // after it was sent successfully, update live statistics
-                notificationRepo.updateNotificationCount(sendNotification);
-                notificationRepo.updateChannelCount(channel);
+                statisticsService.updateNotificationCount(sendNotification);
+                statisticsService.updateChannelCount(channel);
+                statisticsService.updateCustomerNotificationCount(customer);
             }
             }).start();
         }
@@ -84,40 +84,6 @@ public class NotificationTemplateService {
         }
         channel.sendNotification(notificationToSend, customerID);
     }
-    public String getTemplateStatistics(){
-        int mx = 0;
-        String mostNotifiedTemplate = "";
-        String mostNotified = null;
-        HashMap<String, Integer> notificationCount = notificationRepo.getAllTemplateCount();
-        for (String key: notificationCount.keySet()) {
-            if (notificationCount.get(key) > mx) {
-                mx = notificationCount.get(key);
-                mostNotified = key;
-            }
-        }
-        if (mostNotified != null) {
-            mostNotifiedTemplate += "Most Notified Notification Template: " + mostNotified;
-            mostNotifiedTemplate += "\nNumber of times notified: " + mx;
-        }
-        return mostNotifiedTemplate;
-    }
 
-    public String getChannelStatistics(){
-        int mx = 0;
-        String mostNotifiedChannel = "";
-        String mostNotified = null;
-        HashMap<String, Integer> channelCount = notificationRepo.getAllChannelCount();
-        for (String key: channelCount.keySet()) {
-            if (channelCount.get(key) > mx) {
-                mx = channelCount.get(key);
-                mostNotified = key;
-            }
-        }
-        if (mostNotified != null) {
-            mostNotifiedChannel += "Most Notified Notification Channel: " + mostNotified;
-            mostNotifiedChannel += "\nNumber of times notified: " + mx;
-        }
-        return mostNotifiedChannel;
-    }
 
 }

@@ -3,9 +3,6 @@ package app.models.Customer;
 import app.repos.CustomerRepo;
 import app.service.CustomerService;
 
-import javax.persistence.Entity;
-import java.util.Random;
-
 public class Customer {
     private int customerID;
     private String name;
@@ -77,8 +74,5 @@ public class Customer {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-
-
-
 
 }
