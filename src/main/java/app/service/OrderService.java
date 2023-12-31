@@ -39,13 +39,13 @@ public class OrderService {
         return orderRepo.getAll();
     }
 
-    public boolean addSimpleOrder(SimpleOrder order) {
+    public boolean addSimpleOrder(SimpleOrder order, boolean notification) {
         ProcessOrder orderProcessor = new ProcessSimpleOrder(this, productRepo);
         orderProcessor.processOrder(order);
         if (order.getStatus() == OrderStatus.INVALID) {
             return false;
         }
-        notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
+        if(notification) notificationService.generateNotification(NotificationSubject.ORDER_PLACEMENT, order);
         orderRepo.add(order);
         return true;
     }

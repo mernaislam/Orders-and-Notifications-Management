@@ -30,7 +30,8 @@ public class OrderController {
     public ResponseEntity<ResponseEntityStructure> addSimpleOrder(@RequestBody SimpleOrder order, @RequestHeader("Authorization") String token) {
         GlobalException exception;
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
-            orderService.addSimpleOrder(order);
+            // notification will be sent
+            orderService.addSimpleOrder(order, true);
             if(order.getStatus() == OrderStatus.PLACED){
                 exception = new GlobalException("Order placed Successfully!", HttpStatus.OK);
             } else {
@@ -48,7 +49,8 @@ public class OrderController {
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
             // place a simple order for the current user
             SimpleOrder simpleOrder = new SimpleOrder(order.getCustomerUsername(), order.getProducts());
-            orderService.addSimpleOrder(simpleOrder);
+            // no notification will be sent
+            orderService.addSimpleOrder(simpleOrder, false);
             if(simpleOrder.getStatus() == OrderStatus.PLACED){
                 // add the simple order to the orders list in OrderHelper
                 order.addOrder(simpleOrder);
@@ -56,7 +58,6 @@ public class OrderController {
                 if(orderService.validateOrders(order.getOrders())) {
                     CompoundOrder compoundOrder = new CompoundOrder(order.getCustomerUsername(), order.getOrders());
                     orderService.addCompoundOrder(compoundOrder);
-                    orderService.getOrders().remove(simpleOrder);
                     if (compoundOrder.getStatus() == OrderStatus.PLACED) {
                         exception = new GlobalException("Order placed Successfully!", HttpStatus.OK);
                     } else {
