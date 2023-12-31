@@ -25,7 +25,8 @@ public class Customer {
         this.shippingAddress = shippingAddress;
         this.phoneNumber = phoneNumber;
         this.balance = balance;
-        this.customerID = getCustomerId();
+        CustomerService customerService = new CustomerService(new CustomerRepo());
+        this.customerID = customerService.generateCustomerId();
     }
 
     public Customer(int id, String name, String username, String password, String email, Address shippingAddress,
@@ -74,10 +75,7 @@ public class Customer {
         this.balance = balance;
     }
 
-    public int getCustomerId(){
-        Random random = new Random();
-        return random.nextInt(100000 - 1);
-    }
+
 
 
 }

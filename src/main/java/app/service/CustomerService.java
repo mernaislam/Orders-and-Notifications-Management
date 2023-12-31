@@ -128,5 +128,14 @@ public class CustomerService {
         return true;
     }
 
+    public int generateCustomerId(){
+        Random random = new Random();
+        int value = random.nextInt(100000 - 1);
+        while(!uniqueId(value)){
+            value = random.nextInt(100000 - 1);
+        }
+        return value;
+    }
+
 
 }

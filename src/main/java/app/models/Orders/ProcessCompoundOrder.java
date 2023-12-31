@@ -44,7 +44,8 @@ public class ProcessCompoundOrder extends ProcessOrder {
     public void calculateShippingFees(Order order) {
         // should be calculated based on customer's city (random for now)
         double totalShippingFees = 0;
-        double shippingFees = new Random().nextDouble() * (100.0 - 50.0) + 10.0;
+        Random random = new Random();
+        double shippingFees = random.nextInt(50 - 11);
         CompoundOrder compoundOrder = (CompoundOrder) order;
         for (Order o : compoundOrder.getOrders()) {
             o.setShippingFees(shippingFees);
@@ -64,7 +65,7 @@ public class ProcessCompoundOrder extends ProcessOrder {
         order.setStatus(OrderStatus.INVALID);
 
         for (SimpleOrder o : order.getOrders()) {
-            Customer customer = orderService.getCustomer(ord.getCustomerUsername());
+            Customer customer = orderService.getCustomer(o.getCustomerUsername());
             if (customer == null
                     || !orderService.hasMoney(customer, o.getTotalPrice())) {
                 return;
@@ -92,7 +93,7 @@ public class ProcessCompoundOrder extends ProcessOrder {
         }
         // update customer balance
         for (SimpleOrder o : order.getOrders()) {
-            Customer customer = orderService.getCustomer(ord.getCustomerUsername());
+            Customer customer = orderService.getCustomer(o.getCustomerUsername());
             customer.setBalance(customer.getBalance() - o.getTotalPrice());
         }
         // update order status
