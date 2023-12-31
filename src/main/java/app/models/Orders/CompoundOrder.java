@@ -50,4 +50,11 @@ public class CompoundOrder extends Order{
             o.deductProductsFees(orderService);
         }
     }
+
+    @Override
+    public void setPreConfiguredTime(boolean preconfiguredTimeFinished) {
+        for(SimpleOrder o : orders){
+            o.setPreConfiguredTime(preconfiguredTimeFinished);
+        }
+    }
 }

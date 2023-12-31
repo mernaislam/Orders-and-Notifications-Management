@@ -83,4 +83,5 @@ public abstract class Order {
     public abstract void refund(OrderService orderService);
     public abstract void deductShipmentFees(OrderService orderService);
     public abstract void deductProductsFees(OrderService orderService);
+    public abstract void setPreConfiguredTime(boolean preconfiguredTimeFinished);
 }
