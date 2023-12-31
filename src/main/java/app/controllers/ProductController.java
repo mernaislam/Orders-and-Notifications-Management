@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.models.Product.Category;
 import app.models.Product.Product;
 import app.repos.ProductRepo;
 import app.service.ProductService;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path="/api")
@@ -21,5 +23,10 @@ public class ProductController {
     @GetMapping("/products")
     ArrayList<Product> displayProducts(){
         return productService.getProducts();
+    }
+
+    @GetMapping("/categoryCount")
+    Map<Category, Integer> getCategories(){
+        return productService.getCategoryCount();
     }
 }

@@ -76,8 +76,7 @@ public class ProcessSimpleOrder extends ProcessOrder {
             repoProduct.setQuantity(repoProduct.getQuantity() - p.getQuantity());
 
             if (repoProduct.getQuantity() == 0) {
-                productRepo.getCategoryCount().put(repoProduct.getCategory(),
-                        productRepo.getCategoryCount().get(repoProduct.getCategory()) - 1);
+                productRepo.delete(repoProduct.getProductID());
             }
         }
         order.deductProductsFees(orderService);
