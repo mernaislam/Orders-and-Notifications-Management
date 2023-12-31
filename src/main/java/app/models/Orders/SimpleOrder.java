@@ -2,6 +2,7 @@ package app.models.Orders;
 
 import app.models.Customer.Customer;
 import app.models.Product.Product;
+import app.service.OrderService;
 
 import java.util.ArrayList;
 
@@ -14,5 +15,27 @@ public class SimpleOrder extends Order{
     }
     public ArrayList<Product> getProducts() {
         return products;
+    }
+
+    @Override
+    public void refund(OrderService orderService) {
+        Customer customer = orderService.getCustomer(getCustomerUsername());
+        customer.setBalance(customer.getBalance() + getProductsFees());
+        for(Product p : products){
+            Product repoProduct = orderService.getProductRepo().findByID(p.getProductID());
+            repoProduct.setQuantity(repoProduct.getQuantity() + p.getQuantity());
+        }
+    }
+
+    @Override
+    public void deductShipmentFees(OrderService orderService){
+        Customer customer = orderService.getCustomer(getCustomerUsername());
+        customer.setBalance(customer.getBalance() - getShippingFees());
+    }
+
+    @Override
+    public void deductProductsFees(OrderService orderService) {
+        Customer customer = orderService.getCustomer(getCustomerUsername());
+        customer.setBalance(customer.getBalance() - getProductsFees());
     }
 }

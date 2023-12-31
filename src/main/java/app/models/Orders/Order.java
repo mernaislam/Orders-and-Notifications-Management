@@ -1,5 +1,7 @@
 package app.models.Orders;
 
+import app.service.OrderService;
+
 import java.time.LocalDate;
 
 public abstract class Order {
@@ -81,4 +83,8 @@ public abstract class Order {
     public void setPreconfiguredTimeFinished(boolean preconfiguredTimeFinished) {
         this.preconfiguredTimeFinished = preconfiguredTimeFinished;
     }
+
+    public abstract void refund(OrderService orderService);
+    public abstract void deductShipmentFees(OrderService orderService);
+    public abstract void deductProductsFees(OrderService orderService);
 }

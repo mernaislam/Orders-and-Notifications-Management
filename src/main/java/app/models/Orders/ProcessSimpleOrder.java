@@ -1,6 +1,7 @@
 package app.models.Orders;
 
 import app.models.Customer.Customer;
+import app.models.Product.Category;
 import app.models.Product.Product;
 import app.repos.ProductRepo;
 import app.service.OrderService;
@@ -75,10 +76,11 @@ public class ProcessSimpleOrder extends ProcessOrder {
             repoProduct.setQuantity(repoProduct.getQuantity() - p.getQuantity());
 
             if (repoProduct.getQuantity() == 0) {
-                productRepo.delete(repoProduct.getProductID());
+                productRepo.getCategoryCount().put(repoProduct.getCategory(),
+                        productRepo.getCategoryCount().get(repoProduct.getCategory()) - 1);
             }
         }
-        customer.setBalance(customer.getBalance() - order.getProductsFees());
+        order.deductProductsFees(orderService);
         ord.setStatus(OrderStatus.PLACED);
     }
 }
