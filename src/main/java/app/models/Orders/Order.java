@@ -24,9 +24,6 @@ public abstract class Order {
         this.status = OrderStatus.PENDING;
         this.preconfiguredTimeFinished = false;
     }
-    public String getCustomer() {
-        return customerUsername;
-    }
 
     public int getOrderID() {
         return orderID;
@@ -87,4 +84,5 @@ public abstract class Order {
     public abstract void refund(OrderService orderService);
     public abstract void deductShipmentFees(OrderService orderService);
     public abstract void deductProductsFees(OrderService orderService);
+    public abstract void setPreConfiguredTime(boolean preconfiguredTimeFinished);
 }

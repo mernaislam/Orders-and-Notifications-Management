@@ -78,13 +78,19 @@ public class CustomerRepo implements Repository<Customer> {
         customers.add(new Customer(1,
                 "Merna Islam", "mernaislam",
                 "merna12", "merna@email.com",
-                new Address("Giza", 15, 2),
-                "0123356782", 15000.0));
+                new Address("Cairo", 15, 2),
+                "0123356782", 500.0));
 
         customers.add(new Customer(2,
                 "Waleed", "snowkaai",
                 "s123", "waleed@email.com",
-                new Address("Giza", 9, 300),
+                new Address("Cairo", 9, 300),
                 "0123123123", 1000.0));
+
+        customers.add(new Customer(3,
+                "Maria Ehab", "mariaehab",
+                "maria61!!", "maria@email.com",
+                new Address("Giza", 1, 2),
+                "01234206781", 600.0));
     }
 }
