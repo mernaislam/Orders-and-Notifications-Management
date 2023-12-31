@@ -54,7 +54,7 @@ public class OrderController {
             if(order.getStatus() == OrderStatus.PLACED){
                 exception = new GlobalException("Order placed Successfully", HttpStatus.OK);
             } else {
-                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities]", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities or different cities]", HttpStatus.BAD_REQUEST);
             }
         } else {
             exception = new GlobalException("No such username exists, try again", HttpStatus.BAD_REQUEST);
