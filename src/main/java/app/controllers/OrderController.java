@@ -35,12 +35,12 @@ public class OrderController {
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
             orderService.addSimpleOrder(order);
             if(order.getStatus() == OrderStatus.PLACED){
-                exception = new GlobalException("Order placed Successfully", HttpStatus.OK);
+                exception = new GlobalException("Order placed Successfully!", HttpStatus.OK);
             } else {
-                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities]", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order cannot be placed, try again! [check balance or product quantities]", HttpStatus.BAD_REQUEST);
             }
         } else {
-            exception = new GlobalException("Username doesn't match the Jwt token, try again", HttpStatus.BAD_REQUEST);
+            exception = new GlobalException("Username doesn't match the Jwt token, try again!", HttpStatus.BAD_REQUEST);
         }
         return exceptionController.GlobalException(exception);
     }
@@ -52,50 +52,50 @@ public class OrderController {
         if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
             orderService.addCompoundOrder(order);
             if(order.getStatus() == OrderStatus.PLACED){
-                exception = new GlobalException("Order placed Successfully", HttpStatus.OK);
+                exception = new GlobalException("Order placed Successfully!", HttpStatus.OK);
             } else {
-                exception = new GlobalException("Order cannot be placed, try again [check balance or product quantities]", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order cannot be placed, try again! [check balance or product quantities]", HttpStatus.BAD_REQUEST);
             }
         } else {
-            exception = new GlobalException("No such username exists, try again", HttpStatus.BAD_REQUEST);
+            exception = new GlobalException("No such username exists, try again!", HttpStatus.BAD_REQUEST);
         }
         return exceptionController.GlobalException(exception);
     }
 
-    // Delete an existing order
-    @DeleteMapping (path="/order/{id}")
-    public ResponseEntity<ResponseEntityStructure> deleteOrder(@PathVariable(name = "id") int id, @RequestHeader("Authorization") String token) { // works
+    // Cancels Placement and then deletes order
+    @DeleteMapping (path="/cancelPlacement/{id}")
+    public ResponseEntity<ResponseEntityStructure> deleteOrder(@PathVariable(name = "id") int id, @RequestHeader("Authorization") String token) {
         GlobalException exception;
         Order order = orderService.findOrderById(id);
         if(order != null){
             if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
                 if(orderService.cancelPlacement(id)){
-                    exception = new GlobalException("Order is cancelled Successfully!", HttpStatus.OK);
+                    exception = new GlobalException("Order Placement is cancelled Successfully!", HttpStatus.OK);
                 } else {
-                    exception = new GlobalException("Order cannot be cancelled, try again", HttpStatus.BAD_REQUEST);
+                    exception = new GlobalException("Order Placement cannot be cancelled, try again!", HttpStatus.BAD_REQUEST);
                 }
             } else {
-                exception = new GlobalException("Order id doesn't match order username, try again", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order id doesn't match order username, try again!", HttpStatus.BAD_REQUEST);
             }
         } else {
-            exception = new GlobalException("Invalid order id, try again", HttpStatus.BAD_REQUEST);
+            exception = new GlobalException("Invalid order id, try again!", HttpStatus.BAD_REQUEST);
         }
         return exceptionController.GlobalException(exception);
     }
 
     // Returns order by id
     @GetMapping (path="/order/{id}")
-    public Object getOrderById(@PathVariable(name = "id") int id, @RequestHeader("Authorization") String token) { // works
+    public Object getOrderById(@PathVariable(name = "id") int id, @RequestHeader("Authorization") String token) {
         GlobalException exception;
         Order order = orderService.findOrderById(id);
         if(order != null){
             if(jwtTokenUtil.getUsernameFromToken(token.substring(7)).equals(order.getCustomerUsername())){
                 return order;
             } else {
-                exception = new GlobalException("Order id doesn't match order username, try again", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order id doesn't match order username, try again!", HttpStatus.BAD_REQUEST);
             }
         } else {
-            exception = new GlobalException("Invalid order id, try again", HttpStatus.BAD_REQUEST);
+            exception = new GlobalException("Invalid order id, try again!", HttpStatus.BAD_REQUEST);
         }
         return exceptionController.GlobalException(exception);
     }
@@ -105,7 +105,7 @@ public class OrderController {
     public Object getOrders() { // works
         ArrayList<Order> orders = orderService.getOrders();
         if(orders.isEmpty()){
-            GlobalException exception = new GlobalException("No Orders are placed yet", HttpStatus.OK);
+            GlobalException exception = new GlobalException("No Orders are placed yet!", HttpStatus.OK);
             return exceptionController.GlobalException(exception);
         } else {
             return orders;
@@ -114,7 +114,7 @@ public class OrderController {
 
     // Ships Order
     @PutMapping (path="/shipOrder/{id}")
-    public ResponseEntity<ResponseEntityStructure> shipOrder(@PathVariable(name = "id") int id, @RequestHeader("Authorization") String token) { // works
+    public ResponseEntity<ResponseEntityStructure> shipOrder(@PathVariable(name = "id") int id, @RequestHeader("Authorization") String token) {
         GlobalException exception;
         Order order = orderService.findOrderById(id);
         if(order != null){
@@ -122,13 +122,13 @@ public class OrderController {
                 if(orderService.shipOrder(id)){
                     exception = new GlobalException("Order is shipped Successfully!", HttpStatus.OK);
                 } else {
-                    exception = new GlobalException("Order cannot be shipped, try again", HttpStatus.BAD_REQUEST);
+                    exception = new GlobalException("Order cannot be shipped, try again!", HttpStatus.BAD_REQUEST);
                 }
             } else {
-                exception = new GlobalException("Order id doesn't match order username, try again", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order id doesn't match order username, try again!", HttpStatus.BAD_REQUEST);
             }
         } else {
-            exception = new GlobalException("Invalid order id, try again", HttpStatus.BAD_REQUEST);
+            exception = new GlobalException("Invalid order id, try again!", HttpStatus.BAD_REQUEST);
         }
         return exceptionController.GlobalException(exception);
     }
@@ -143,13 +143,13 @@ public class OrderController {
                 if(orderService.cancelShipment(id)){
                     exception = new GlobalException("Order shipment is cancelled Successfully!", HttpStatus.OK);
                 } else {
-                    exception = new GlobalException("Order shipment cannot be cancelled, try again", HttpStatus.BAD_REQUEST);
+                    exception = new GlobalException("Order shipment cannot be cancelled!", HttpStatus.BAD_REQUEST);
                 }
             } else {
-                exception = new GlobalException("Order id doesn't match order username, try again", HttpStatus.BAD_REQUEST);
+                exception = new GlobalException("Order id doesn't match order username, try again!", HttpStatus.BAD_REQUEST);
             }
         } else {
-            exception = new GlobalException("Invalid order id, try again", HttpStatus.BAD_REQUEST);
+            exception = new GlobalException("Invalid order id, try again!", HttpStatus.BAD_REQUEST);
         }
         return exceptionController.GlobalException(exception);
     }

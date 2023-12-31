@@ -3,9 +3,11 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationChannel;
 import app.models.Notification.NotificationTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
+@Service
 public class StatisticsService {
     private HashMap<String, Integer> notificationTemplateCount = new HashMap<>();
     private HashMap<String, Integer> channelCount = new HashMap<>();
@@ -82,10 +84,10 @@ public class StatisticsService {
         }
         if (mostNotified != null) {
             mostNotifiedCustomer += "Most Notified Customer: ";
-            mostNotifiedCustomer += "\n Name: " + mostNotified.getName();
-            mostNotifiedCustomer += "\n Username: " + mostNotified.getUsername();
-            mostNotifiedCustomer += "\n Email: " + mostNotified.getEmail();
-            mostNotifiedCustomer += "\n Phone Number: " + mostNotified.getPhoneNumber();
+            mostNotifiedCustomer += "\n    - Name: " + mostNotified.getName();
+            mostNotifiedCustomer += "\n    - Username: " + mostNotified.getUsername();
+            mostNotifiedCustomer += "\n    - Email: " + mostNotified.getEmail();
+            mostNotifiedCustomer += "\n    - Phone Number: " + mostNotified.getPhoneNumber();
             mostNotifiedCustomer += "\nNumber of times notified: " + mx;
         }
         return mostNotifiedCustomer;

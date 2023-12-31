@@ -14,17 +14,17 @@ public class StatisticsController {
     public StatisticsController(StatisticsService statisticsService) {
         this.statisticsService = statisticsService;
     }
-    // return  most notified template - statistics
+    // return  most notified template - statistics [no authorization]
     @GetMapping(path="/getTemplateStatistics")
     public String getTemplateStatistics() {
         return statisticsService.getTemplateStatistics();
     }
-    // return most notified channel - statistics
+    // return most notified channel - statistics [no authorization]
     @GetMapping (path="/getChannelStatistics")
     public String getChannelStatistics() {
         return statisticsService.getChannelStatistics();
     }
-    // return most notified customer - statistics
+    // return most notified customer - statistics [no authorization]
     @GetMapping (path="/getCustomerStatistics")
     public String getCustomerStatistics() {
         return statisticsService.getCustomerStatistics();
