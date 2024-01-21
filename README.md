@@ -18,7 +18,7 @@ A Java implementation of a software that allows making online purchase for order
 - Used in the process order service as we were able to process orders in a different manner based on the order type whether it is simple or compound order.
 - Used in the notification template service as we were able to create the notification templates efficiently since we reused several steps in every template, only changing the implementation of the ones that were different.
 ### Composite Pattern:
-- Used in the order service as the recursive tree structure allowed us to navigate the hierarchy as if dealing with individual objects, regardless of whether they were simple or compound orders.
+- Used in the orders model as the recursive tree structure allowed us to navigate the hierarchy as if dealing with individual objects, regardless of whether they were simple or compound orders.
 
 # Technologies used
 - ```Spring Boot```: Java-based open-source framework that simplifies the development of Spring-based applications.
