@@ -21,10 +21,6 @@ public class SimpleOrder extends Order{
     public void refund(OrderService orderService) {
         Customer customer = orderService.getCustomer(getCustomerUsername());
         customer.setBalance(customer.getBalance() + getProductsFees());
-//        for(Product p : products){
-//            Product repoProduct = orderService.getProductRepo().findByID(p.getProductID());
-//            repoProduct.setQuantity(repoProduct.getQuantity() + p.getQuantity());
-//        }
     }
 
     @Override

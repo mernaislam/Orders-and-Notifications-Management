@@ -1,12 +1,10 @@
 package app.models.Orders;
 
 import app.models.Customer.Customer;
-import app.models.Product.Category;
 import app.models.Product.Product;
 import app.repos.ProductRepo;
 import app.service.OrderService;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class ProcessSimpleOrder extends ProcessOrder {
@@ -47,7 +45,6 @@ public class ProcessSimpleOrder extends ProcessOrder {
     public void validateOrder(Order ord) {
         SimpleOrder order = (SimpleOrder) ord;
         Customer customer = orderService.getCustomer(ord.getCustomerUsername());
-//         law el order rg3ly status invalid m3mlosh add
 
         ord.setStatus(OrderStatus.INVALID);
         if (orderService.orderExists(order.getOrderID())
