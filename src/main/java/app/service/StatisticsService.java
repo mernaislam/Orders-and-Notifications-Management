@@ -1,7 +1,6 @@
 package app.service;
 
 import app.models.Customer.Customer;
-import app.models.Notification.NotificationChannel;
 import app.models.Notification.NotificationTemplate;
 import app.repos.StatisticsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +28,6 @@ public class StatisticsService {
             notificationTemplateCount.put(notificationTemplateName, 1);
         }
     }
-    public void updateChannelCount(NotificationChannel channel){
-        HashMap<String, Integer> channelCount = statisticsRepo.getChannelCount();
-        String channelName = channel.getClass().getSimpleName();
-        if (channelCount.containsKey(channelName)){
-            channelCount.put(channelName, channelCount.get(channelName) + 1);
-        }
-        else {
-            channelCount.put(channelName, 1);
-        }
-    }
     public void updateCustomerNotificationCount(Customer customer){
         HashMap<Customer, Integer> customerNotificationCount = statisticsRepo.getCustomerNotificationCount();
         if (customerNotificationCount.containsKey(customer)){
@@ -48,6 +37,11 @@ public class StatisticsService {
             customerNotificationCount.put(customer, 1);
         }
     }
+    public void updateStatistics(NotificationTemplate notification, Customer customer){
+        updateNotificationCount(notification);
+        updateCustomerNotificationCount(customer);
+    }
+
     public String getTemplateStatistics(){
         HashMap<String, Integer> notificationTemplateCount = statisticsRepo.getNotificationTemplateCount();
         int mx = 0;
@@ -66,23 +60,6 @@ public class StatisticsService {
         return mostNotifiedTemplate;
     }
 
-    public String getChannelStatistics(){
-        HashMap<String, Integer> channelCount = statisticsRepo.getChannelCount();
-        int mx = 0;
-        String mostNotifiedChannel = "";
-        String mostNotified = null;
-        for (String key: channelCount.keySet()) {
-            if (channelCount.get(key) > mx) {
-                mx = channelCount.get(key);
-                mostNotified = key;
-            }
-        }
-        if (mostNotified != null) {
-            mostNotifiedChannel += "Most Notified Notification Channel: " + mostNotified;
-            mostNotifiedChannel += "\nNumber of times notified: " + mx;
-        }
-        return mostNotifiedChannel;
-    }
     public String getCustomerStatistics(){
         HashMap<Customer, Integer> customerNotificationCount = statisticsRepo.getCustomerNotificationCount();
         int mx = 0;

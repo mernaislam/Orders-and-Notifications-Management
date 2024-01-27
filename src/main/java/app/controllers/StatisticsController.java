@@ -19,12 +19,7 @@ public class StatisticsController {
     public String getTemplateStatistics() {
         return statisticsService.getTemplateStatistics();
     }
-    // return most notified channel - statistics [no authorization]
-    @GetMapping (path="/getChannelStatistics")
-    public String getChannelStatistics() {
-        return statisticsService.getChannelStatistics();
-    }
-    // return most notified customer - statistics [no authorization]
+    // return most notified customer (Email/Username) - statistics [no authorization]
     @GetMapping (path="/getCustomerStatistics")
     public String getCustomerStatistics() {
         return statisticsService.getCustomerStatistics();

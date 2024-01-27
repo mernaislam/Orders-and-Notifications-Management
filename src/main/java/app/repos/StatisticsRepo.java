@@ -8,19 +8,13 @@ import java.util.HashMap;
 @Component
 public class StatisticsRepo {
     private HashMap<String, Integer> notificationTemplateCount = new HashMap<>();
-    private HashMap<String, Integer> channelCount = new HashMap<>();
     private HashMap<Customer, Integer> customerNotificationCount = new HashMap<>();
 
     public StatisticsRepo() {
-
     }
 
     public HashMap<String, Integer> getNotificationTemplateCount() {
         return notificationTemplateCount;
-    }
-
-    public HashMap<String, Integer> getChannelCount() {
-        return channelCount;
     }
 
     public HashMap<Customer, Integer> getCustomerNotificationCount() {

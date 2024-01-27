@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path="/api")
 public class NotificationController {
     private final NotificationTemplateService templateService;
-    private GlobalExceptionController exceptionController = new GlobalExceptionController();
+    private final GlobalExceptionController exceptionController = new GlobalExceptionController();
 
     @Autowired
     public NotificationController(NotificationTemplateService templateService) {

@@ -116,7 +116,7 @@ public class OrderController {
 
     // Returns list of all orders in the system [no authorization]
     @GetMapping (path="/order")
-    public Object getOrders() { // works
+    public Object getOrders() {
         ArrayList<Order> orders = orderService.getOrders();
         if(orders.isEmpty()){
             GlobalException exception = new GlobalException("No Orders are placed yet!", HttpStatus.OK);

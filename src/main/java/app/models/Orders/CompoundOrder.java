@@ -1,10 +1,7 @@
 package app.models.Orders;
 
-import app.models.Customer.Customer;
-import app.models.Product.Product;
 import app.service.OrderService;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CompoundOrder extends Order{
@@ -53,6 +50,7 @@ public class CompoundOrder extends Order{
 
     @Override
     public void setPreConfiguredTime(boolean preconfiguredTimeFinished) {
+        this.preconfiguredTimeFinished = preconfiguredTimeFinished;
         for(SimpleOrder o : orders){
             o.setPreConfiguredTime(preconfiguredTimeFinished);
         }

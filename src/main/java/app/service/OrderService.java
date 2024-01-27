@@ -3,7 +3,6 @@ package app.service;
 import app.models.Customer.Customer;
 import app.models.Notification.NotificationSubject;
 import app.models.Orders.*;
-import app.models.Product.Product;
 import app.repos.CustomerRepo;
 import app.repos.OrderRepo;
 import app.repos.ProductRepo;
@@ -108,6 +107,8 @@ public class OrderService {
        if(!order.isPreconfiguredTimeFinished()) {
            notificationService.generateNotification(NotificationSubject.SHIPMENT_CANCELLATION, order);
            orderRepo.updateStatus(OrderStatus.PLACED, id);
+           // reset preconfigured time if it was changed in another thread in the second after we entered if condition
+           order.setPreConfiguredTime(false);
            return true;
        }
        return false;
